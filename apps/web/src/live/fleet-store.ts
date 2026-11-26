@@ -17,10 +17,6 @@ export function createFleetStore() {
       set((previous) => reduceMessages({ previous, messages, receivedAt }));
     },
 
-    setLink: (change) => {
-      set({ link: { ...change, since: Date.now() } });
-    },
-
     upsertAlert: (alert) => {
       set((previous) => ({ alerts: { ...previous.alerts, [alert.id]: alert } }));
     },

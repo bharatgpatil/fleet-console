@@ -4,7 +4,6 @@ import { useFleet } from '../../live/use-fleet.ts';
 import { PageSpinner } from '../../shared/components/PageSpinner.tsx';
 import { Main, ShellRoot, SkipLink, Spacer, TopBar, TopBarToolbar } from './AppShell.styles.ts';
 import { Brand } from './Brand.tsx';
-import { ConnectionDot } from './ConnectionDot.tsx';
 
 export function AppShell() {
   const hydrated = useFleet((state) => state.hydrated);
@@ -16,7 +15,6 @@ export function AppShell() {
         <TopBarToolbar variant="dense">
           <Brand />
           <Spacer />
-          <ConnectionDot />
           <NeedsYouButton />
         </TopBarToolbar>
       </TopBar>

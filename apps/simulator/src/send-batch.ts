@@ -2,7 +2,7 @@ import { ApiPaths, IngestResult, type TelemetrySample } from '@fleet/contracts';
 import { authHeaders } from './auth-headers.ts';
 import { REQUEST_TIMEOUT_MS, SERVER_URL } from './config.ts';
 
-export type SendOutcome =
+type SendOutcome =
   | { kind: 'sent'; result: IngestResult }
   | { kind: 'rejected'; status: number }
   | { kind: 'failed'; reason: string };

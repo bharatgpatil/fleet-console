@@ -14,13 +14,15 @@
     "build": "npm run build -w @fleet/web",
     "start": "npm run start -w @fleet/server",
     "serve": "concurrently -k -n server,sim -c blue,magenta \"npm:start -w @fleet/server\" \"npm:start -w @fleet/simulator\"",
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc -p e2e",
     "lint": "oxlint",
     "check": "npm run typecheck && npm run lint",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "@types/node": "^26.6.6",
     "concurrently": "^10.0.7",
     "oxlint": "^1.94.0",

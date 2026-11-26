@@ -59,15 +59,53 @@ updates its picture of the fleet and opens or closes alerts. Each browser keeps 
 picture once, then only what changed, four times a second. The Robot page also asks the server for that robot's last
 15 minutes every 5 s.
 
-## What's faked, and why
+## What's simulated, simplified and real
 
-- **The robots.** A simulator with a fixed seed plays 570 robots over three sites. It makes trouble on purpose: robots
-  drop out for 8 to 75 s, some reports arrive late or twice, robots reboot and restart their numbering, report errors,
-  and one robot per site wanders off its floor plan. Real robots would post the same batch format to the same endpoint.
-- **Storage.** Everything is in memory, so setup is one command. A restart loses alerts, acknowledgements and history.
-- **History.** Only 15 minutes per robot, one point every 5 s.
-- **People.** No accounts. An optional shared password guards the console, and an Ack isn't tied to a person.
-- **Floor plans.** Rectangles with chargers, no walls or aisles.
+### Simulated
+
+- **The robots.** 570 robots over three sites (20, 50 and 500), from a fixed seed so every run looks the same. Each one
+  drives between random spots at 1.2 m/s, rests, drains its battery (faster while moving), heads to the nearest
+  charger when it runs low and charges to 95%. About 4% are careless and wait too long, so low and critical battery
+  alerts really happen. A robot that runs flat stops and is towed to a charger after 90 s. Each robot's clock is a
+  little off from the server's.
+  _Why:_ there are no real robots to connect, and a fixed seed makes demos and bug reports repeatable.
+- **Reports.** Each robot reports once a second, and the simulator posts them to the server in batches twice a second,
+  through the same `/api/ingest` endpoint and format a real robot gateway would use.
+  _Why:_ the server can't tell the simulator from real robots, so nothing in the server or the console is special-cased.
+- **Trouble, on purpose.** Robots drop out for 8 to 75 s, and half of them send their missed reports in a burst when
+  they come back, which arrive late. About 1% of reports arrive 2 to 8 s late and 0.3% arrive twice. Now and then a
+  robot reports an error code such as `E-LIDAR-04` or `E-ESTOP` that clears on its own. One robot per site goes
+  silent for good after 45 s. `SIM_FAULTS=off` turns all of this off.
+  _Why:_ the hard part of a fleet console is data that's late, missing, doubled or out of order. The simulator makes
+  sure every run meets each case, so the stale and offline states, the alerts and the ordering rules are always on
+  show.
+- **Sites.** Rectangles with three or more chargers along one wall. No walls, aisles or zones.
+  _Why:_ enough to place robots and show movement. Real floor plans would come from a facilities system.
+
+### Handled, but never triggered by the simulator
+
+- **Reboots.** When a robot restarts and its sequence numbers start again from 1, the server accepts the new reports
+  instead of treating them as late. Tests cover this; the simulator never reboots a robot.
+- **Robots off the map.** A position outside the floor plan is drawn at the edge with a warning ring. The simulator
+  keeps robots inside.
+
+### Simplified
+
+- **Storage.** Everything lives in the server's memory, so setup is one command with no database. A restart loses
+  alerts, acknowledgements and history, and the simulator fills the picture again within seconds.
+- **History.** 15 minutes per robot, one point every 5 s, enough to show trends on the Robot page.
+- **One instance.** One server holds all the state. Docker runs the server and the simulator in one container, because
+  free hosting gives you one.
+- **Access.** One shared ingest token and one shared console password instead of a token per robot and single sign-on.
+  An Ack isn't tied to a person.
+- **Time.** Liveness uses the time the server received a report, because robot clocks drift. A robot's own timestamp
+  is used only to tell a reboot from a late report.
+
+### Real
+
+Everything between the ingest endpoint and the screen is the real thing: validation of every message, the ordering,
+liveness and alert rules, the snapshot-then-changes stream with reconnects, history over REST, Ack with rollback, and
+the console itself. Nothing in the browser is mocked.
 
 ## Key decisions
 
@@ -125,8 +163,12 @@ The coding rules are in [CLAUDE.md](CLAUDE.md).
 ## Test plan
 
 `npm test` runs the Vitest tests for the core logic: connectivity, report ordering, alert rules, the fleet engine,
-history, the browser store's message handling, robot health and the battery chart's gaps. They sit next to the code as
-`*.test.ts` and run in CI.
+history, the ingest token and console password checks, the browser store's message handling, robot health and the
+battery chart's gaps. They sit next to the code as `*.test.ts`.
+
+`npm run test:e2e` runs the Playwright tests in `e2e/`. It builds the app, starts the server and a small, well-behaved
+simulator on port 8097, and drives a real browser through the Fleet page, search, a robot's page, an unknown robot and
+acknowledging an alert in Needs you. Locally it uses your installed Chrome. Both suites run in CI.
 
 The rest of this plan isn't automated yet. It lists what to cover and at which level, most valuable first.
 

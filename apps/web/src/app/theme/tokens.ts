@@ -4,7 +4,7 @@ export const MONO_FONT =
   '"JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace';
 export const INTER = '"Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
 
-export interface DesignTokens {
+export type DesignTokens = {
   font: {
     heading: string;
     body: string;
@@ -22,7 +22,7 @@ export interface DesignTokens {
   color: {
     linkAccent: string;
   };
-}
+};
 
 export const SHARED_TOKENS: Omit<DesignTokens, 'color'> = {
   font: {

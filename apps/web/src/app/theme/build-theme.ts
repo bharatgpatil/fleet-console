@@ -6,11 +6,11 @@ import {
 } from '@mui/material/styles';
 import { SHARED_TOKENS, type DesignTokens } from './tokens.ts';
 
-export interface ModeColors {
+export type ModeColors = {
   palette: PaletteOptions;
   linkAccent: string;
   components?: ThemeOptions['components'];
-}
+};
 
 function sharedOptions(t: DesignTokens): ThemeOptions {
   const heading = {

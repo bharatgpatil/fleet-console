@@ -7,16 +7,16 @@ import { formatDuration } from '../../../shared/utils/format.ts';
 import { HealthIcon } from '../../../shared/components/HealthIcon.tsx';
 import { useFocusAfterAck } from '../hooks/use-focus-after-ack.ts';
 import { useAcknowledgeAlerts } from '../mutations/use-acknowledge-alert.ts';
-import { AckButton, QueueItem, QueueItemButton, QueueList } from './NeedsYouQueue.styles.ts';
+import { AckButton, QueueItem, QueueItemButton, QueueList } from './ActionNeededQueue.styles.ts';
 
 const MAX_ITEMS = 20;
 
-type NeedsYouQueueProps = {
+type ActionNeededQueueProps = {
   alerts: readonly Alert[];
   onOpenRobot?: () => void;
 };
 
-export function NeedsYouQueue({ alerts, onOpenRobot }: NeedsYouQueueProps) {
+export function ActionNeededQueue({ alerts, onOpenRobot }: ActionNeededQueueProps) {
   const robots = useFleet((state) => state.robots);
   const sites = useFleet((state) => state.sites);
   const navigate = useNavigate();

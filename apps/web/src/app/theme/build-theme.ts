@@ -46,7 +46,6 @@ function sharedOptions(t: DesignTokens): ThemeOptions {
           'a, button, [role="button"], [role="tab"], input, label': { touchAction: 'manipulation' },
           '@media (pointer: fine)': { html: { overscrollBehavior: 'none' } },
           '.mono, .tabular': { fontFamily: t.font.mono, fontVariantNumeric: 'tabular-nums' },
-          // ::-webkit rules are for Safari, which ignores scrollbar-color.
           '*': {
             scrollbarWidth: 'thin',
             scrollbarColor:
@@ -103,7 +102,6 @@ function sharedOptions(t: DesignTokens): ThemeOptions {
 export function buildTheme({ palette, linkAccent, components }: ModeColors): Theme {
   const tokens: DesignTokens = { ...SHARED_TOKENS, color: { linkAccent } };
 
-  // Merge first: with cssVariables, createTheme builds CSS variables from its first argument only.
   return createTheme(
     deepMerge(sharedOptions(tokens), { tokens, palette, components: components ?? {} }),
   );

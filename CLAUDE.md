@@ -53,8 +53,7 @@ codebase coherent as it grows.
 
 ## Code
 
-- Comments: none by default. Keep one only for what the code can't say (hidden constraint, invariant, a
-  workaround's reason), as a single terse line. Every non-trivial regex gets one saying what it matches.
+- No comments in code. Reasoning that matters goes in an ADR or the README.
 - Names in English; spell out abbreviations a new reader would have to look up.
 - Let errors bubble when you can't handle them; never catch just to log and rethrow.
 - No `@ts-ignore` / `@ts-expect-error` / `@ts-nocheck` or lint-disable comments.

@@ -1,23 +1,28 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { fileURLToPath } from 'node:url';
+import { defineConfig, loadEnv } from 'vite';
 
-const API_TARGET = process.env.API_TARGET ?? 'http://localhost:8080';
+const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url));
 
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 3000,
-    strictPort: true,
-    proxy: {
-      '/api': API_TARGET,
-      '/ws': { target: API_TARGET, ws: true },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, REPO_ROOT, '');
+  const apiTarget = env.API_TARGET ?? 'http://localhost:8080';
+
+  return {
+    plugins: [react()],
+    server: {
+      port: 3000,
+      strictPort: true,
+      proxy: {
+        '/api': apiTarget,
+        '/ws': { target: apiTarget, ws: true },
+      },
     },
-  },
-  // JS/TS modules already get inline source maps in dev; CSS files need this flag.
-  css: {
-    devSourcemap: true,
-  },
-  build: {
-    sourcemap: true,
-  },
+    css: {
+      devSourcemap: true,
+    },
+    build: {
+      sourcemap: true,
+    },
+  };
 });

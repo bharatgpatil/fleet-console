@@ -15,6 +15,10 @@ or wasteful, because most robots haven't changed since the last ask.
   something.
 - When anything goes wrong (a skipped number, a dropped connection, a few seconds of silence), the browser does one
   thing: reconnect and start again from a fresh full picture.
+- If a browser falls too far behind (more than 2 MB waiting to be sent), the server closes its connection instead of
+  holding on to ever more data. The browser then recovers the same way.
+- The server keeps everything in memory. A restart starts from an empty fleet, and the robots fill it in again within a
+  second.
 
 ## Consequences
 

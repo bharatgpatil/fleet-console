@@ -1,6 +1,7 @@
 import type {
   Alert,
   AlertKind,
+  FleetRegistry,
   FleetSnapshot,
   IngestResult,
   Robot,
@@ -16,7 +17,6 @@ import type {
   ConnectivityThresholds,
   FleetDelta,
   FleetEngineOptions,
-  FleetRegistry,
 } from './types.ts';
 
 export class FleetEngine {

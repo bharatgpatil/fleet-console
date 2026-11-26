@@ -21,5 +21,4 @@ export const ALERTS_KEPT_WHILE_OFFLINE: readonly AlertKind[] = [
 
 export const RESOLVED_ALERT_RETENTION_MS = 30 * 60_000;
 
-// A sequence this far behind, with a newer robot clock, is a rebooted robot rather than a late report.
 export const REBOOT_SEQUENCE_GAP = 1_000;

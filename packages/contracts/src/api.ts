@@ -6,14 +6,20 @@ export const ApiPaths = {
   fleet: '/api/fleet',
   ingest: '/api/ingest',
   acknowledgeAlert: (alertId: string) => `/api/alerts/${encodeURIComponent(alertId)}/ack`,
+  acknowledgeAlertRoute: '/api/alerts/:alertId/ack',
   stream: '/ws',
   health: '/healthz',
 } as const;
 
-export const FleetSnapshot = z.object({
-  serverTime: z.number(),
+export const FleetRegistry = z.object({
   sites: z.array(Site),
   robots: z.array(Robot),
+});
+
+export type FleetRegistry = z.infer<typeof FleetRegistry>;
+
+export const FleetSnapshot = FleetRegistry.extend({
+  serverTime: z.number(),
   states: z.array(RobotLiveState),
   alerts: z.array(Alert),
 });

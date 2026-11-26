@@ -2,6 +2,8 @@ import { DEFAULT_FAULTS, NO_FAULTS } from '@fleet/simulation';
 
 export const SERVER_URL = process.env.SERVER_URL ?? 'http://localhost:8080';
 
+export const INGEST_TOKEN = process.env.INGEST_TOKEN;
+
 export const SEED = Number(process.env.SIM_SEED ?? 7);
 
 export const TICK_MS = Number(process.env.SIM_TICK_MS ?? 500);

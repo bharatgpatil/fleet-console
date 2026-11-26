@@ -3,9 +3,11 @@ import type { BatteryTone } from '../utils/battery-tone.ts';
 
 export const MeterTrack = styled('div', {
   shouldForwardProp: (prop) => prop !== 'trackWidth',
-})<{ trackWidth: number }>(({ theme, trackWidth }) => ({
+})<{ trackWidth: number | 'fill' }>(({ theme, trackWidth }) => ({
   position: 'relative',
-  width: trackWidth,
+  width: trackWidth === 'fill' ? 'auto' : trackWidth,
+  flex: trackWidth === 'fill' ? 1 : undefined,
+  minWidth: 0,
   height: 8,
   borderRadius: theme.tokens.radius.pill,
   backgroundColor: theme.palette.action.hover,

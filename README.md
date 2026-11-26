@@ -44,6 +44,14 @@ The Docker image runs on any host that runs a container and allows WebSockets, s
 listens on port 8080 and answers health checks on `/healthz`. Run exactly one instance: all state lives in that
 process.
 
+Set two secrets on the host before it goes public. `INGEST_TOKEN` (16+ characters) means only the bundled simulator
+can post reports. `CONSOLE_PASSWORD` (8+ characters) puts the console, Ack and the stream behind the browser's
+password prompt, with any user name. Both are off when unset, which is what you want locally.
+
+On Render, `render.yaml` sets this up: New → Blueprint, pick this repo, and enter a console password when asked.
+Render generates the ingest token. The free plan sleeps after 15 minutes without visitors and starts with fresh data
+when it wakes.
+
 ## How data moves
 
 The simulator plays the robots and sends their reports to the server twice a second. The server checks each report,
@@ -58,7 +66,7 @@ picture once, then only what changed, four times a second. The Robot page also a
   and one robot per site wanders off its floor plan. Real robots would post the same batch format to the same endpoint.
 - **Storage.** Everything is in memory, so setup is one command. A restart loses alerts, acknowledgements and history.
 - **History.** Only 15 minutes per robot, one point every 5 s.
-- **People.** No login. An Ack isn't tied to a person.
+- **People.** No accounts. An optional shared password guards the console, and an Ack isn't tied to a person.
 - **Floor plans.** Rectangles with chargers, no walls or aisles.
 
 ## Key decisions
@@ -116,7 +124,11 @@ The coding rules are in [CLAUDE.md](CLAUDE.md).
 
 ## Test plan
 
-There are no automated tests yet. This is what to cover and at which level, most valuable first.
+`npm test` runs the Vitest tests for the core logic: connectivity, report ordering, alert rules, the fleet engine,
+history, the browser store's message handling, robot health and the battery chart's gaps. They sit next to the code as
+`*.test.ts` and run in CI.
+
+The rest of this plan isn't automated yet. It lists what to cover and at which level, most valuable first.
 
 ### Rules and helpers (unit tests, no server or browser)
 

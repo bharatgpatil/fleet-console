@@ -7,3 +7,5 @@ export const SOCKET_OPEN = 1;
 export const MAX_BUFFERED_BYTES = 2 * 1024 * 1024;
 
 export const CLOSE_TOO_SLOW = 4008;
+
+export const BASIC_AUTH_CHALLENGE = 'Basic realm="Fleet Console", charset="UTF-8"';

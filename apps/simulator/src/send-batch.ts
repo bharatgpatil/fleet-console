@@ -1,4 +1,5 @@
 import { ApiPaths, IngestResult, type TelemetrySample } from '@fleet/contracts';
+import { authHeaders } from './auth-headers.ts';
 import { REQUEST_TIMEOUT_MS, SERVER_URL } from './config.ts';
 
 export type SendOutcome =
@@ -10,7 +11,10 @@ export async function sendBatch(samples: readonly TelemetrySample[]): Promise<Se
   try {
     const response = await fetch(`${SERVER_URL}${ApiPaths.ingest}`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        ...authHeaders(),
+      },
       body: JSON.stringify({ samples }),
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });

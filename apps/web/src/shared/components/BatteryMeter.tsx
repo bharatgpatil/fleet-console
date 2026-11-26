@@ -7,7 +7,7 @@ type BatteryMeterProps = {
   value: number;
   charging: boolean;
   stale: boolean;
-  width: number;
+  width: number | 'fill';
 };
 
 export function BatteryMeter({ value, charging, stale, width }: BatteryMeterProps) {
@@ -17,7 +17,7 @@ export function BatteryMeter({ value, charging, stale, width }: BatteryMeterProp
     <Stack
       direction="row"
       spacing={1}
-      sx={{ alignItems: 'center' }}
+      sx={{ alignItems: 'center', width: width === 'fill' ? '100%' : undefined }}
       role="meter"
       aria-valuenow={percent}
       aria-valuemin={0}

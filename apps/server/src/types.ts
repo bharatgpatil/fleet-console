@@ -21,4 +21,6 @@ export type AppDependencies = {
   now: () => number;
   logLevel: string;
   webRoot: string | undefined;
+  ingestToken: string | undefined;
+  consolePassword: string | undefined;
 };

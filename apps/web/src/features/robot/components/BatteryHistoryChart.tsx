@@ -4,9 +4,9 @@ import { useTheme } from '@mui/material';
 import { ChartsReferenceLine } from '@mui/x-charts/ChartsReferenceLine';
 import { LineChart } from '@mui/x-charts/LineChart';
 import { useMemo } from 'react';
-import { formatClock } from '../../../shared/utils/format.ts';
+import { formatClock, formatShortClock } from '../../../shared/utils/format.ts';
 import { batterySeries } from '../utils/battery-series.ts';
-import { CHART_HEIGHT } from '../utils/constants.ts';
+import { CHART_HEIGHT, CHART_TIME_TICKS } from '../utils/constants.ts';
 
 type BatteryHistoryChartProps = {
   points: readonly HistoryPoint[];
@@ -39,7 +39,11 @@ export function BatteryHistoryChart({ points, windowMs, now }: BatteryHistoryCha
           scaleType: 'time',
           min: new Date(now - windowMs),
           max: new Date(now),
-          valueFormatter: (value: Date) => formatClock(value.getTime()),
+          tickNumber: CHART_TIME_TICKS,
+          valueFormatter: (value: Date, context) =>
+            context.location === 'tick'
+              ? formatShortClock(value.getTime())
+              : formatClock(value.getTime()),
         },
       ]}
       yAxis={[{ min: 0, max: 100, width: 44, valueFormatter: (value: number) => `${value}%` }]}
@@ -64,7 +68,7 @@ export function BatteryHistoryChart({ points, windowMs, now }: BatteryHistoryCha
       <ChartsReferenceLine
         y={ALERT_RULES.batteryCriticalBelow}
         label={`Critical ${ALERT_RULES.batteryCriticalBelow}%`}
-        labelAlign="end"
+        labelAlign="start"
         lineStyle={{ stroke: theme.palette.health.critical, strokeDasharray: '4 4' }}
         labelStyle={{ fontSize: 11, fill: theme.palette.text.secondary }}
       />

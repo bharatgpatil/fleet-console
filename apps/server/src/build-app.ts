@@ -3,7 +3,8 @@ import websocket from '@fastify/websocket';
 import { ApiPaths, IngestBatch, type ApiError } from '@fleet/contracts';
 import Fastify, { type FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { BODY_LIMIT_BYTES } from './constants.ts';
+import { hasBasicPassword, hasBearerToken } from './auth.ts';
+import { BASIC_AUTH_CHALLENGE, BODY_LIMIT_BYTES } from './constants.ts';
 import type { AppDependencies } from './types.ts';
 
 const AlertParams = z.object({ alertId: z.string().min(1) });
@@ -17,10 +18,48 @@ export async function buildApp({
   now,
   logLevel,
   webRoot,
+  ingestToken,
+  consolePassword,
 }: AppDependencies): Promise<FastifyInstance> {
   const app = Fastify({ logger: { level: logLevel }, bodyLimit: BODY_LIMIT_BYTES });
 
   await app.register(websocket);
+
+  app.addHook('onRequest', async (request, reply) => {
+    const path = request.url.split('?')[0];
+
+    if (path === ApiPaths.health) {
+      return;
+    }
+
+    if (path === ApiPaths.ingest) {
+      if (
+        ingestToken !== undefined &&
+        !hasBearerToken(request.headers.authorization, ingestToken)
+      ) {
+        const error: ApiError = { error: 'Missing or wrong ingest token' };
+
+        return reply.code(401).send(error);
+      }
+
+      return;
+    }
+
+    const simulatorReadingFleet =
+      path === ApiPaths.fleet &&
+      ingestToken !== undefined &&
+      hasBearerToken(request.headers.authorization, ingestToken);
+
+    if (
+      consolePassword !== undefined &&
+      !simulatorReadingFleet &&
+      !hasBasicPassword(request.headers.authorization, consolePassword)
+    ) {
+      const error: ApiError = { error: 'Password required' };
+
+      return reply.code(401).header('www-authenticate', BASIC_AUTH_CHALLENGE).send(error);
+    }
+  });
 
   app.get(ApiPaths.health, async () => ({ ok: true }));
 

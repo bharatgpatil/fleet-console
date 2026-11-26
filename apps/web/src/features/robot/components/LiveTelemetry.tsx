@@ -26,7 +26,7 @@ export function LiveTelemetry({ last, stale }: LiveTelemetryProps) {
             {charging ? 'charging' : 'draining'}
           </Typography>
         </Stack>
-        <BatteryMeter value={last.battery} charging={charging} stale={stale} width={240} />
+        <BatteryMeter value={last.battery} charging={charging} stale={stale} width="fill" />
       </div>
       <ReadingsGrid>
         <TelemetryReading

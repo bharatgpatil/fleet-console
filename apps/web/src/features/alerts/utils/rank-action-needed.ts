@@ -1,6 +1,6 @@
 import type { Alert } from '@fleet/contracts';
 
-export function rankNeedsYou(alerts: readonly Alert[]): Alert[] {
+export function rankActionNeeded(alerts: readonly Alert[]): Alert[] {
   return alerts
     .filter((a) => a.resolvedAt === null && a.acknowledgedAt === null)
     .toSorted((a, b) =>

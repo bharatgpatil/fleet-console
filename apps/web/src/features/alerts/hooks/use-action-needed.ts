@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import type { Alert } from '@fleet/contracts';
 import { useFleet } from '../../../live/use-fleet.ts';
-import { rankNeedsYou } from '../utils/rank-needs-you.ts';
+import { rankActionNeeded } from '../utils/rank-action-needed.ts';
 
-export function useNeedsYou(): Alert[] {
+export function useActionNeeded(): Alert[] {
   const alertsById = useFleet((s) => s.alerts);
 
-  return useMemo(() => rankNeedsYou(Object.values(alertsById)), [alertsById]);
+  return useMemo(() => rankActionNeeded(Object.values(alertsById)), [alertsById]);
 }

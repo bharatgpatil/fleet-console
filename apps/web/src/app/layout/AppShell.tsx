@@ -1,5 +1,5 @@
 import { Outlet } from '@tanstack/react-router';
-import { NeedsYouButton } from '../../features/alerts/index.ts';
+import { ActionNeededButton } from '../../features/alerts/index.ts';
 import { useFleet } from '../../live/use-fleet.ts';
 import { Main, ShellRoot, SkipLink, Spacer, TopBar, TopBarToolbar } from './AppShell.styles.ts';
 import { Brand } from './Brand.tsx';
@@ -16,7 +16,7 @@ export function AppShell() {
         <TopBarToolbar variant="dense">
           <Brand />
           <Spacer />
-          <NeedsYouButton />
+          <ActionNeededButton />
         </TopBarToolbar>
       </TopBar>
       <Main id="main" tabIndex={-1} aria-busy={!hydrated}>

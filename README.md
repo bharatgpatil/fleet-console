@@ -10,7 +10,7 @@ in the last few minutes, and which problems need a person.
   live. Clicking a count shows those robots across all sites.
 - **Robot page.** Live battery, activity, speed and position, open alerts with Ack, alerts closed in the last 30
   minutes, a battery chart and the robot's path over the last 15 minutes.
-- **Needs you.** A drawer with every open alert nobody has acknowledged, critical first. Ack one or all shown.
+- **Action needed.** A drawer with every open alert nobody has acknowledged, critical first. Ack one or all shown.
 - **Knowing what to trust.** A robot turns stale after 5 s without a report and offline after 30 s; the map draws it
   dashed or hollow and the table greys its values. If the browser itself stops getting updates for 3 s, a banner says
   so and shows the time of the last data. If the server can't be reached at all, the loading screen says so.
@@ -168,7 +168,7 @@ battery chart's gaps. They sit next to the code as `*.test.ts`.
 
 `npm run test:e2e` runs the Playwright tests in `e2e/`. It builds the app, starts the server and a small, well-behaved
 simulator on port 8097, and drives a real browser through the Fleet page, search, a robot's page, an unknown robot and
-acknowledging an alert in Needs you. Locally it uses your installed Chrome. Both suites run in CI.
+acknowledging an alert in Action needed. Locally it uses your installed Chrome. Both suites run in CI.
 
 The rest of this plan isn't automated yet. It lists what to cover and at which level, most valuable first.
 
@@ -187,7 +187,7 @@ The rest of this plan isn't automated yet. It lists what to cover and at which l
   30 s breaks the battery line.
 - **Simulation:** the same seed gives the same fleet and the same moves. Robots stay inside their site.
 - **Web helpers:** `reduceMessages` (a snapshot loads everything, deltas before it are ignored, an empty heartbeat
-  changes nothing, the clock offset is set), `robotHealth`, `filterRows`, `rankNeedsYou`, `backoffDelay` and
+  changes nothing, the clock offset is set), `robotHealth`, `filterRows`, `rankActionNeeded`, `backoffDelay` and
   `toMapRobot`.
 
 ### Server (in process, no network)
@@ -208,12 +208,12 @@ The rest of this plan isn't automated yet. It lists what to cover and at which l
 
 - Fleet opens on the busiest site. A KPI click shows all sites, filtered. Search matches names. A row click opens the
   robot, and an unknown robot id shows "not found".
-- Needs you lists critical alerts first. Ack removes the item and focus moves to the next one.
+- Action needed lists critical alerts first. Ack removes the item and focus moves to the next one.
 - With the server stopped, the loading screen says it can't reach the server after 5 s. When the server comes back,
   data returns without a reload.
 - A robot that stops reporting shows the stale banner, then the offline one.
 - The Robot page shows a battery chart and a path on the map after a minute of reports. Ack all clears the shown
-  alerts in Needs you.
+  alerts in Action needed.
 - With the stream blocked, the "Updates paused" banner appears within 3 s and goes away once data flows again.
 
 ### By hand

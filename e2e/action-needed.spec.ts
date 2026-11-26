@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 
 const FAR_FUTURE_MS = 24 * 60 * 60_000;
 
-test('a critical battery alert shows in Needs you and Ack clears it', async ({
+test('a critical battery alert shows in Action needed and Ack clears it', async ({
   page,
   request,
 }, testInfo) => {
@@ -33,7 +33,7 @@ test('a critical battery alert shows in Needs you and Ack clears it', async ({
   expect(ingest.ok()).toBe(true);
 
   await page.goto('/fleet');
-  await page.getByRole('button', { name: /Needs you/ }).click();
+  await page.getByRole('button', { name: /Action needed/ }).click();
 
   const ack = page.getByRole('button', {
     name: `Acknowledge ${robot.name}: Battery below ${ALERT_RULES.batteryCriticalBelow}%`,

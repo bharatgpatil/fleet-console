@@ -10,11 +10,11 @@ place makes each harder to get right.
 
 ## Decision
 
-- **Live fleet data** lives in one zustand store, filled only by the stream. Updates that arrive close together are
+- Live fleet data lives in one zustand store, filled only by the stream. Updates that arrive close together are
   applied together, once per screen frame, so 500 robots moving don't cause 500 re-renders.
-- **Requests** like acknowledging an alert go through TanStack Query. The alert is shown as acknowledged straight away
+- Requests like acknowledging an alert go through TanStack Query. The alert is shown as acknowledged straight away
   and put back if the request fails.
-- **What the user is looking at** lives in the URL, so a view can be shared or reloaded.
+- What the user is looking at lives in the URL, so a view can be shared or reloaded.
 - Components read the store through small hooks (`useRobotRows`, `useRobotView`, `useServerNow`). Times like "last seen
   4 s ago" are worked out against the server's clock, not the browser's.
 

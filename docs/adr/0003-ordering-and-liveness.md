@@ -11,7 +11,7 @@ one that has stopped reporting.
 ## Decision
 
 - Reports are put in order by `sequence`. A report with the same number is a duplicate, a lower number is late, and
-  both are dropped. The one exception: a much lower number with a newer robot clock means the robot restarted, so it
+  both are dropped. If the number is much lower but the robot clock is newer, the robot has restarted, so the report
   is applied.
 - A robot is `online` while it reports, `stale` after 5 s of silence and `offline` after 30 s. The server works this
   out from when it last heard from the robot, not from the robot's clock.

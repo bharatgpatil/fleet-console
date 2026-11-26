@@ -1,4 +1,4 @@
-import type { Connectivity, RobotActivity } from '@fleet/contracts';
+import type { Connectivity, Position, RobotActivity } from '@fleet/contracts';
 import type { Health } from '../../live/types.ts';
 
 export type MapRobot = {
@@ -11,6 +11,11 @@ export type MapRobot = {
   connectivity: Connectivity;
   activity: RobotActivity;
   battery: number;
+};
+
+export type TrailSegment = {
+  id: string;
+  points: readonly Position[];
 };
 
 export type LabelAnchor = 'start' | 'middle' | 'end';

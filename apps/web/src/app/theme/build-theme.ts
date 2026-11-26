@@ -102,23 +102,12 @@ function sharedOptions(t: DesignTokens): ThemeOptions {
 export function buildTheme({ palette, linkAccent, components }: ModeColors): Theme {
   const tokens: DesignTokens = { ...SHARED_TOKENS, color: { linkAccent } };
 
-  return createTheme(
-    deepMerge(sharedOptions(tokens), { tokens, palette, components: components ?? {} }),
-  );
-}
+  const shared = sharedOptions(tokens);
 
-type PlainObject = Record<string, unknown>;
-const isPlainObject = (v: unknown): v is PlainObject =>
-  typeof v === 'object' && v !== null && Object.getPrototypeOf(v) === Object.prototype;
-
-function deepMerge<T extends object>(base: T, override: object): T {
-  const out: PlainObject = { ...(base as PlainObject) };
-
-  for (const [key, value] of Object.entries(override)) {
-    const current = out[key];
-
-    out[key] = isPlainObject(current) && isPlainObject(value) ? deepMerge(current, value) : value;
-  }
-
-  return out as T;
+  return createTheme({
+    ...shared,
+    tokens,
+    palette,
+    components: { ...shared.components, ...components },
+  });
 }

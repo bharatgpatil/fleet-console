@@ -3,6 +3,9 @@
 A live view of warehouse robots across several sites. You can see where each robot is, how it's doing, what happened
 in the last few minutes, and which problems need a person.
 
+**Live demo:** https://fleet-console-2ef6.onrender.com (free plan: the first visit after a quiet spell can take up to a
+minute while it wakes, and it starts with fresh data).
+
 ## What it does
 
 - **Fleet page.** Counts of critical, offline and warning robots across the fleet, one tab per site (the busiest opens
@@ -217,6 +220,9 @@ The rest of this plan isn't automated yet. It lists what to cover and at which l
 - With the stream blocked, the "Updates paused" banner appears within 3 s and goes away once data flows again.
 
 ### By hand
+
+[docs/manual-browser-tests.md](docs/manual-browser-tests.md) has a 19-step script a browser agent or a person can
+run against the local stack or the live demo. On top of that:
 
 - Keyboard only through the Fleet page, the Robot page and the drawer. A screen reader reads the headings and the table.
 - Widths of 375, 768, 1280 and 2560 px (21:9).

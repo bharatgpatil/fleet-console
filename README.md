@@ -33,6 +33,6 @@ up.
 | `packages/simulation` | Pretend robots that drive around, drain batteries and drop out    | Done       |
 | `apps/simulator`      | Runs the pretend robots and sends their reports to the server     | Done       |
 | `apps/server`         | Takes in reports, keeps the current state, streams it to browsers | Done       |
-| `apps/web`            | The console itself                                                | Live store |
+| `apps/web`            | The console itself                                                | Fleet page |
 
 The reasons behind the main choices are in [docs/adr](docs/adr). The coding rules are in [CLAUDE.md](CLAUDE.md).

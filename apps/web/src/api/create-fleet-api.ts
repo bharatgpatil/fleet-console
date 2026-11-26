@@ -1,4 +1,4 @@
-import { Alert, ApiPaths } from '@fleet/contracts';
+import { Alert, ApiPaths, RobotHistory } from '@fleet/contracts';
 import { request } from './request.ts';
 import { streamUrl } from './stream-url.ts';
 import type { FleetApi } from './types.ts';
@@ -13,5 +13,7 @@ export function createFleetApi(): FleetApi {
         schema: Alert,
         init: { method: 'POST' },
       }),
+    robotHistory: (robotId) =>
+      request({ path: ApiPaths.robotHistory(robotId), schema: RobotHistory }),
   };
 }

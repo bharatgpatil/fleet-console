@@ -1,6 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Alert, Stack, Typography } from '@mui/material';
 import { useParams } from '@tanstack/react-router';
+import { useMemo } from 'react';
 import { useRobotView } from '../../live/use-robot-view.ts';
 import { ButtonLink } from '../../shared/components/ButtonLink.tsx';
 import { EmptyState } from '../../shared/components/EmptyState.tsx';
@@ -8,9 +9,11 @@ import { HealthBadge } from '../../shared/components/HealthBadge.tsx';
 import { RelativeTime } from '../../shared/components/RelativeTime.tsx';
 import { SectionCard } from '../../shared/components/SectionCard.tsx';
 import { formatClock } from '../../shared/utils/format.ts';
-import { RobotAlerts } from '../alerts/index.ts';
+import { ClosedAlerts, RobotAlerts } from '../alerts/index.ts';
 import { SiteMap, toMapRobot } from '../site-map/index.ts';
 import { LiveTelemetry } from './components/LiveTelemetry.tsx';
+import { RobotHistory } from './components/RobotHistory.tsx';
+import { useRobotHistory } from './queries/use-robot-history.ts';
 import {
   BackLinkLabel,
   backLinkSx,
@@ -24,7 +27,13 @@ import {
 
 export function RobotDetailPage() {
   const { robotId } = useParams({ from: '/robots/$robotId' });
-  const { robot, site, state, openAlerts, health } = useRobotView(robotId);
+  const { robot, site, state, openAlerts, closedAlerts, health } = useRobotView(robotId);
+  const history = useRobotHistory(robotId);
+
+  const trail = useMemo(
+    () => (history.data === undefined ? null : history.data.points.map((point) => point.position)),
+    [history.data],
+  );
 
   if (robot === undefined) {
     return (
@@ -99,21 +108,34 @@ export function RobotDetailPage() {
                 <RobotAlerts alerts={openAlerts} />
               </CardPadding>
             </SectionCard>
-          </Stack>
-          {site === undefined || marker === null ? null : (
-            <SectionCard title="Position">
-              <MapWell>
-                <SiteMap
-                  site={site}
-                  robots={[marker]}
-                  focusIds={null}
-                  highlightedId={robot.id}
-                  onSelect={null}
-                  onHover={null}
-                />
-              </MapWell>
+            <SectionCard title="Closed alerts" subtitle="Last 30 minutes">
+              <CardPadding>
+                <ClosedAlerts alerts={closedAlerts} />
+              </CardPadding>
             </SectionCard>
-          )}
+          </Stack>
+          <Stack spacing={2}>
+            {site === undefined || marker === null ? null : (
+              <SectionCard title="Position" subtitle="Line shows the last 15 minutes">
+                <MapWell>
+                  <SiteMap
+                    site={site}
+                    robots={[marker]}
+                    focusIds={null}
+                    highlightedId={robot.id}
+                    onSelect={null}
+                    onHover={null}
+                    trail={trail}
+                  />
+                </MapWell>
+              </SectionCard>
+            )}
+            <SectionCard title="Battery" subtitle="Last 15 minutes">
+              <CardPadding>
+                <RobotHistory robotId={robot.id} />
+              </CardPadding>
+            </SectionCard>
+          </Stack>
         </DetailGrid>
       )}
     </Stack>

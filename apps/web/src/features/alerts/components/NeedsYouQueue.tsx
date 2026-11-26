@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import type { Alert } from '@fleet/contracts';
 import { useFleet } from '../../../live/use-fleet.ts';
@@ -24,6 +24,7 @@ export function NeedsYouQueue({ alerts, onOpenRobot }: NeedsYouQueueProps) {
   const now = useServerNow();
   const failedIds = acknowledge.data?.failedIds ?? [];
   const { containerRef, rememberPosition } = useFocusAfterAck(alerts);
+  const visible = alerts.slice(0, MAX_ITEMS);
 
   return (
     <div ref={containerRef} tabIndex={-1}>
@@ -33,8 +34,21 @@ export function NeedsYouQueue({ alerts, onOpenRobot }: NeedsYouQueueProps) {
         </Typography>
       ) : (
         <>
+          {visible.length > 1 ? (
+            <Stack direction="row" sx={{ justifyContent: 'flex-end', mb: 1 }}>
+              <Button
+                size="small"
+                onClick={(event) => {
+                  rememberPosition(event.currentTarget);
+                  acknowledge.mutate(visible.map((alert) => alert.id));
+                }}
+              >
+                Ack all {visible.length} shown
+              </Button>
+            </Stack>
+          ) : null}
           <QueueList>
-            {alerts.slice(0, MAX_ITEMS).map((alert) => {
+            {visible.map((alert) => {
               const robotName = robots[alert.robotId]?.name ?? alert.robotId;
 
               return (

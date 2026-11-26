@@ -7,6 +7,8 @@ export const ApiPaths = {
   ingest: '/api/ingest',
   acknowledgeAlert: (alertId: string) => `/api/alerts/${encodeURIComponent(alertId)}/ack`,
   acknowledgeAlertRoute: '/api/alerts/:alertId/ack',
+  robotHistory: (robotId: string) => `/api/robots/${encodeURIComponent(robotId)}/history`,
+  robotHistoryRoute: '/api/robots/:robotId/history',
   stream: '/ws',
   health: '/healthz',
 } as const;

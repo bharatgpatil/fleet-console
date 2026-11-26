@@ -16,11 +16,17 @@ export type AlertRules = {
   readonly batteryClearAbove: number;
 };
 
+export type HistoryOptions = {
+  readonly windowMs: number;
+  readonly everyMs: number;
+};
+
 export type FleetEngineOptions = {
   newId: () => string;
   connectivity?: ConnectivityThresholds;
   alertRules?: AlertRules;
   resolvedAlertRetentionMs?: number;
+  history?: HistoryOptions;
 };
 
 export type SampleOutcome = 'applied' | 'late' | 'duplicate';

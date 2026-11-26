@@ -1,3 +1,4 @@
+import fastifyStatic from '@fastify/static';
 import websocket from '@fastify/websocket';
 import { ApiPaths, IngestBatch, type ApiError } from '@fleet/contracts';
 import Fastify, { type FastifyInstance } from 'fastify';
@@ -7,12 +8,15 @@ import type { AppDependencies } from './types.ts';
 
 const AlertParams = z.object({ alertId: z.string().min(1) });
 
+const RobotParams = z.object({ robotId: z.string().min(1) });
+
 export async function buildApp({
   engine,
   hub,
   registry,
   now,
   logLevel,
+  webRoot,
 }: AppDependencies): Promise<FastifyInstance> {
   const app = Fastify({ logger: { level: logLevel }, bodyLimit: BODY_LIMIT_BYTES });
 
@@ -54,12 +58,46 @@ export async function buildApp({
     return alert;
   });
 
+  app.get(ApiPaths.robotHistoryRoute, async (request, reply) => {
+    const parsed = RobotParams.safeParse(request.params);
+
+    if (!parsed.success) {
+      const error: ApiError = { error: 'Invalid robot id', details: parsed.error.issues };
+
+      return reply.code(400).send(error);
+    }
+
+    const history = engine.historyOf(parsed.data.robotId, now());
+
+    if (history === undefined) {
+      const error: ApiError = { error: 'Robot not found' };
+
+      return reply.code(404).send(error);
+    }
+
+    return history;
+  });
+
   app.get(ApiPaths.stream, { websocket: true }, (socket) => {
     const disconnect = hub.connect(socket);
 
     socket.on('close', disconnect);
     socket.on('error', disconnect);
   });
+
+  if (webRoot !== undefined) {
+    await app.register(fastifyStatic, { root: webRoot });
+
+    app.setNotFoundHandler((request, reply) => {
+      if (request.method !== 'GET' || request.url.startsWith('/api/')) {
+        const error: ApiError = { error: 'Not found' };
+
+        return reply.code(404).send(error);
+      }
+
+      return reply.sendFile('index.html');
+    });
+  }
 
   return app;
 }

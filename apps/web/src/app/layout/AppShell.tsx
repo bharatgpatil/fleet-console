@@ -4,6 +4,7 @@ import { useFleet } from '../../live/use-fleet.ts';
 import { Main, ShellRoot, SkipLink, Spacer, TopBar, TopBarToolbar } from './AppShell.styles.ts';
 import { Brand } from './Brand.tsx';
 import { FleetLoading } from './FleetLoading.tsx';
+import { StaleBanner } from './StaleBanner.tsx';
 
 export function AppShell() {
   const hydrated = useFleet((state) => state.hydrated);
@@ -19,6 +20,7 @@ export function AppShell() {
         </TopBarToolbar>
       </TopBar>
       <Main id="main" tabIndex={-1} aria-busy={!hydrated}>
+        <StaleBanner />
         {hydrated ? <Outlet /> : <FleetLoading />}
       </Main>
     </ShellRoot>

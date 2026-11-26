@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { useStore } from 'zustand';
 import type { FleetApi } from '../api/types.ts';
 import { FleetContext, type FleetContextValue } from './fleet-context.ts';
+import type { FleetStore } from './fleet-store.ts';
 import type { FleetActions, FleetState } from './types.ts';
 
 function useFleetContext(): FleetContextValue {
@@ -18,6 +19,10 @@ export function useFleet<Selected>(
   selector: (state: FleetState & FleetActions) => Selected,
 ): Selected {
   return useStore(useFleetContext().store, selector);
+}
+
+export function useFleetStore(): FleetStore {
+  return useFleetContext().store;
 }
 
 export function useApi(): FleetApi {

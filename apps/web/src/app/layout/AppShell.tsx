@@ -1,4 +1,5 @@
 import { Outlet } from '@tanstack/react-router';
+import { NeedsYouButton } from '../../features/alerts/index.ts';
 import { useFleet } from '../../live/use-fleet.ts';
 import { PageSpinner } from '../../shared/components/PageSpinner.tsx';
 import { Main, ShellRoot, SkipLink, Spacer, TopBar, TopBarToolbar } from './AppShell.styles.ts';
@@ -16,6 +17,7 @@ export function AppShell() {
           <Brand />
           <Spacer />
           <ConnectionDot />
+          <NeedsYouButton />
         </TopBarToolbar>
       </TopBar>
       <Main id="main" tabIndex={-1} aria-busy={!hydrated}>

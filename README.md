@@ -221,6 +221,9 @@ The rest of this plan isn't automated yet. It lists what to cover and at which l
 
 ### By hand
 
+[docs/manual-browser-tests.md](docs/manual-browser-tests.md) has a 19-step script a browser agent or a person can
+run against the local stack or the live demo. On top of that:
+
 - Keyboard only through the Fleet page, the Robot page and the drawer. A screen reader reads the headings and the table.
 - Widths of 375, 768, 1280 and 2560 px (21:9).
 - An axe scan shows no violations.

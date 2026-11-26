@@ -7,10 +7,17 @@ export const PageStack = styled('div')(({ theme }) => ({
   gap: theme.spacing(2.5),
 }));
 
-export const PageTitle = styled('h1')(({ theme }) => ({
-  ...theme.typography.h4,
-  margin: 0,
-}));
+export const PageTitle = styled('h1')({
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  margin: -1,
+  padding: 0,
+  overflow: 'hidden',
+  clip: 'rect(0 0 0 0)',
+  whiteSpace: 'nowrap',
+  border: 0,
+});
 
 export const CardActions = styled('div')(({ theme }) => ({
   display: 'flex',

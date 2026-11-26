@@ -102,7 +102,6 @@ function sharedOptions(t: DesignTokens): ThemeOptions {
 export function buildTheme({ palette, linkAccent, components }: ModeColors): Theme {
   const tokens: DesignTokens = { ...SHARED_TOKENS, color: { linkAccent } };
 
-  // Merge first: with cssVariables, createTheme builds CSS variables from its first argument only.
   return createTheme(
     deepMerge(sharedOptions(tokens), { tokens, palette, components: components ?? {} }),
   );

@@ -1,6 +1,5 @@
 import type { Random } from './types.ts';
 
-// mulberry32: a tiny seeded generator, so the same seed gives the same fleet behaviour.
 export function createRandom(seed: number): Random {
   let state = seed >>> 0;
 

@@ -17,8 +17,8 @@ export function useAcknowledgeAlerts() {
       const results = await Promise.allSettled(alertIds.map((id) => api.acknowledgeAlert(id)));
 
       return {
-        acked: results.flatMap((r) => (r.status === 'fulfilled' ? [r.value] : [])),
-        failedIds: alertIds.filter((_, i) => results[i]?.status === 'rejected'),
+        acked: results.flatMap((result) => (result.status === 'fulfilled' ? [result.value] : [])),
+        failedIds: alertIds.filter((_, index) => results[index]?.status === 'rejected'),
       };
     },
 

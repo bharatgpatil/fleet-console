@@ -9,7 +9,7 @@ import { RelativeTime } from '../../shared/components/RelativeTime.tsx';
 import { SectionCard } from '../../shared/components/SectionCard.tsx';
 import { formatClock } from '../../shared/utils/format.ts';
 import { RobotAlerts } from '../alerts/index.ts';
-import { SiteMap, type MapRobot } from '../site-map/index.ts';
+import { SiteMap, toMapRobot } from '../site-map/index.ts';
 import { LiveTelemetry } from './components/LiveTelemetry.tsx';
 import {
   BackLinkLabel,
@@ -24,7 +24,7 @@ import {
 
 export function RobotDetailPage() {
   const { robotId } = useParams({ from: '/robots/$robotId' });
-  const { robot, site, state, health } = useRobotView(robotId);
+  const { robot, site, state, openAlerts, health } = useRobotView(robotId);
 
   if (robot === undefined) {
     return (
@@ -35,21 +35,7 @@ export function RobotDetailPage() {
   }
 
   const last = state === undefined ? null : state.last;
-
-  const marker: MapRobot | null =
-    state === undefined || last === null
-      ? null
-      : {
-          id: robot.id,
-          name: robot.name,
-          x: last.position.x,
-          y: last.position.y,
-          headingRadians: last.headingRadians,
-          health,
-          connectivity: state.connectivity,
-          activity: last.activity,
-          battery: last.battery,
-        };
+  const marker = toMapRobot({ robot, state, health });
 
   return (
     <Stack spacing={2.5}>
@@ -110,7 +96,7 @@ export function RobotDetailPage() {
             </SectionCard>
             <SectionCard title="Open alerts">
               <CardPadding>
-                <RobotAlerts robotId={robot.id} />
+                <RobotAlerts alerts={openAlerts} />
               </CardPadding>
             </SectionCard>
           </Stack>

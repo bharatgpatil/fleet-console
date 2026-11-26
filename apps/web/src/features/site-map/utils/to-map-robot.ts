@@ -1,21 +1,30 @@
-import type { RobotRow } from '../../../live/types.ts';
+import type { Robot, RobotLiveState } from '@fleet/contracts';
+import type { Health } from '../../../live/types.ts';
 import type { MapRobot } from '../types.ts';
 
-export function toMapRobot(row: RobotRow): MapRobot | null {
-  if (row.state === undefined || row.state.last === null) {
+export function toMapRobot({
+  robot,
+  state,
+  health,
+}: {
+  robot: Robot;
+  state: RobotLiveState | undefined;
+  health: Health;
+}): MapRobot | null {
+  if (state === undefined || state.last === null) {
     return null;
   }
 
-  const last = row.state.last;
+  const last = state.last;
 
   return {
-    id: row.id,
-    name: row.robot.name,
+    id: robot.id,
+    name: robot.name,
     x: last.position.x,
     y: last.position.y,
     headingRadians: last.headingRadians,
-    health: row.health,
-    connectivity: row.state.connectivity,
+    health,
+    connectivity: state.connectivity,
     activity: last.activity,
     battery: last.battery,
   };

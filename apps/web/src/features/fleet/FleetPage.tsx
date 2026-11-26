@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { InputAdornment, Typography, useMediaQuery, type Theme } from '@mui/material';
+import { InputAdornment, useMediaQuery, type Theme } from '@mui/material';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { ALL_SITES, type FleetSearch, type HealthFilter } from '../../app/search.ts';
@@ -8,7 +8,6 @@ import { useFleet } from '../../live/use-fleet.ts';
 import { useRobotRows } from '../../live/use-robot-rows.ts';
 import { SectionCard } from '../../shared/components/SectionCard.tsx';
 import { useThrottledValue } from '../../shared/hooks/use-throttled-value.ts';
-import { countLabel } from '../../shared/utils/format.ts';
 import { SiteMap, toMapRobot, type MapRobot } from '../site-map/index.ts';
 import { FleetKpis } from './components/FleetKpis.tsx';
 import { HealthFilterToggle } from './components/HealthFilterToggle.tsx';
@@ -100,12 +99,7 @@ export function FleetPage() {
 
   return (
     <PageStack>
-      <div>
-        <PageTitle>Fleet overview</PageTitle>
-        <Typography variant="body2" color="text.secondary">
-          {countLabel(allRows.length, 'robot')} across {countLabel(sites.length, 'site')}
-        </Typography>
-      </div>
+      <PageTitle>Fleet overview</PageTitle>
 
       <FleetKpis
         counts={fleetCounts}

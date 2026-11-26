@@ -48,9 +48,6 @@ export function startLiveSync(stream: FleetStream, store: FleetStore): () => voi
       queue.push(message);
       schedule();
     },
-    onLinkChange: (change) => {
-      store.getState().setLink(change);
-    },
   });
 
   return () => {

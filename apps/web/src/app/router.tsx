@@ -6,11 +6,16 @@ import {
   redirect,
 } from '@tanstack/react-router';
 import { FleetPage } from '../features/fleet/index.ts';
+import { AppCrash } from './layout/AppCrash.tsx';
 import { AppShell } from './layout/AppShell.tsx';
 import { NotFound } from './NotFound.tsx';
 import { FleetSearch } from './search.ts';
 
-const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: NotFound });
+const rootRoute = createRootRoute({
+  component: AppShell,
+  notFoundComponent: NotFound,
+  errorComponent: AppCrash,
+});
 
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,

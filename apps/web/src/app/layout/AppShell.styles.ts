@@ -26,9 +26,14 @@ export const TopBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
 }));
 
+const PAGE_MAX_WIDTH = 1600;
+
 export const TopBarToolbar = styled(Toolbar)(({ theme }) => ({
   gap: theme.spacing(2),
   minHeight: 56,
+  width: '100%',
+  maxWidth: PAGE_MAX_WIDTH,
+  marginInline: 'auto',
 }));
 
 export const Spacer = styled('div')({
@@ -37,6 +42,9 @@ export const Spacer = styled('div')({
 
 export const Main = styled('main')(({ theme }) => ({
   flex: 1,
+  width: '100%',
+  maxWidth: PAGE_MAX_WIDTH,
+  marginInline: 'auto',
   padding: theme.spacing(1.5, 1.5, 4),
   [theme.breakpoints.up('md')]: {
     padding: theme.spacing(3, 3, 6),

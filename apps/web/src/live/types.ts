@@ -1,9 +1,6 @@
 import type { Alert, Robot, RobotLiveState, ServerMessage, Site } from '@fleet/contracts';
-import type { LinkChange } from '../api/types.ts';
 
 export type Health = 'critical' | 'offline' | 'warning' | 'ok' | 'unknown';
-
-export type LinkState = LinkChange & { since: number };
 
 export type FleetData = {
   sites: Record<string, Site>;
@@ -15,14 +12,12 @@ export type FleetData = {
 };
 
 export type FleetState = FleetData & {
-  link: LinkState;
   hydrated: boolean;
   clockOffsetMs: number;
 };
 
 export type FleetActions = {
   applyMessages: (messages: readonly ServerMessage[], receivedAt: number) => void;
-  setLink: (change: LinkChange) => void;
   upsertAlert: (alert: Alert) => void;
 };
 

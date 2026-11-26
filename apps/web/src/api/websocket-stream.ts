@@ -15,7 +15,6 @@ export class WebSocketStream implements FleetStream {
     let detach: AbortController | null = null;
     let attempt = 0;
     let expectedSequence = 0;
-    let everLive = false;
     let stopped = false;
     let retryTimer: ReturnType<typeof setTimeout> | undefined;
     let watchdog: ReturnType<typeof setTimeout> | undefined;
@@ -34,27 +33,19 @@ export class WebSocketStream implements FleetStream {
       }
     };
 
-    const reconnect = (reason: string) => {
+    const reconnect = () => {
       if (stopped) {
         return;
       }
 
       teardown();
-
-      const retryInMs = backoffDelay(attempt);
-
+      retryTimer = setTimeout(open, backoffDelay(attempt));
       attempt++;
-      listener.onLinkChange({
-        status: everLive ? 'reconnecting' : 'connecting',
-        retryInMs,
-        reason,
-      });
-      retryTimer = setTimeout(open, retryInMs);
     };
 
     const armWatchdog = () => {
       clearTimeout(watchdog);
-      watchdog = setTimeout(() => reconnect('no data from server'), WATCHDOG_MS);
+      watchdog = setTimeout(reconnect, WATCHDOG_MS);
     };
 
     const handleMessage = (raw: unknown) => {
@@ -65,13 +56,13 @@ export class WebSocketStream implements FleetStream {
       try {
         message = ServerMessage.parse(JSON.parse(String(raw)));
       } catch {
-        reconnect('malformed message');
+        reconnect();
 
         return;
       }
 
       if (message.sequence !== expectedSequence) {
-        reconnect(`missed messages (expected #${expectedSequence}, got #${message.sequence})`);
+        reconnect();
 
         return;
       }
@@ -80,8 +71,6 @@ export class WebSocketStream implements FleetStream {
 
       if (message.type === 'snapshot') {
         attempt = 0;
-        everLive = true;
-        listener.onLinkChange({ status: 'live' });
       }
 
       listener.onMessage(message);
@@ -93,7 +82,7 @@ export class WebSocketStream implements FleetStream {
       try {
         socket = new WebSocket(this.url);
       } catch {
-        reconnect('could not open socket');
+        reconnect();
 
         return;
       }
@@ -102,13 +91,10 @@ export class WebSocketStream implements FleetStream {
       socket.addEventListener('message', (event) => handleMessage(event.data), {
         signal: detach.signal,
       });
-      socket.addEventListener('close', () => reconnect('connection closed'), {
-        signal: detach.signal,
-      });
+      socket.addEventListener('close', reconnect, { signal: detach.signal });
       armWatchdog();
     };
 
-    listener.onLinkChange({ status: 'connecting', retryInMs: null, reason: null });
     open();
 
     return () => {

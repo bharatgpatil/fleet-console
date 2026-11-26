@@ -17,7 +17,7 @@ export function BatteryMeter({ value, charging, stale, width }: BatteryMeterProp
     <Stack
       direction="row"
       spacing={1}
-      sx={{ alignItems: 'center', opacity: stale ? 0.55 : 1 }}
+      sx={{ alignItems: 'center' }}
       role="meter"
       aria-valuenow={percent}
       aria-valuemin={0}
@@ -31,7 +31,12 @@ export function BatteryMeter({ value, charging, stale, width }: BatteryMeterProp
           style={{ transform: `scaleX(${Math.max(2, value) / 100})` }}
         />
       </MeterTrack>
-      <Typography variant="body2" component={MeterValue} className="tabular">
+      <Typography
+        variant="body2"
+        component={MeterValue}
+        className="tabular"
+        color={stale ? 'text.secondary' : 'text.primary'}
+      >
         {percent}%
       </Typography>
       {charging ? <BoltIcon fontSize="inherit" sx={{ color: 'primary.main', ml: -0.5 }} /> : null}

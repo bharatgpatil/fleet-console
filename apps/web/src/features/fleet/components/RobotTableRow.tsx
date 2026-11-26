@@ -6,6 +6,7 @@ import { BatteryMeter } from '../../../shared/components/BatteryMeter.tsx';
 import { HealthBadge } from '../../../shared/components/HealthBadge.tsx';
 import { HealthIcon } from '../../../shared/components/HealthIcon.tsx';
 import { RelativeTime } from '../../../shared/components/RelativeTime.tsx';
+import { TextLink } from '../../../shared/components/TextLink.tsx';
 import { AlertLine } from './AlertLine.tsx';
 import { BodyRow, NameCell, NameStack } from './RobotTable.styles.ts';
 
@@ -57,9 +58,18 @@ export const RobotTableRow = memo(function RobotTableRow({
   );
 
   const name = (
-    <Typography variant="body2" noWrap sx={{ fontWeight: 600 }}>
+    <TextLink
+      to="/robots/$robotId"
+      params={{ robotId: row.id }}
+      variant="body2"
+      color="inherit"
+      underline="hover"
+      noWrap
+      sx={{ fontWeight: 600 }}
+      onClick={(event) => event.stopPropagation()}
+    >
       {row.robot.name}
-    </Typography>
+    </TextLink>
   );
 
   return (
@@ -69,13 +79,6 @@ export const RobotTableRow = memo(function RobotTableRow({
       onMouseEnter={() => onHover(row.id)}
       onMouseLeave={() => onHover(null)}
       onClick={() => onOpen(row.id)}
-      onKeyDown={(event) => {
-        if (event.key === 'Enter') {
-          onOpen(row.id);
-        }
-      }}
-      tabIndex={0}
-      aria-label={`Open ${row.robot.name}`}
     >
       {compact ? (
         <TableCell>

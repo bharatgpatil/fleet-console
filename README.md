@@ -6,6 +6,18 @@ in the last few minutes, and which problems need a person.
 **Live demo:** https://fleet-console-2ef6.onrender.com (free plan: the first visit after a quiet spell can take up to a
 minute while it wakes, and it starts with fresh data).
 
+## What I chose to build, and why
+
+All three parts, with the most depth in the frontend. A fleet console is only as good as the data under it, so I built
+a real server and a simulator that misbehaves on purpose, rather than a fixture. That way the console has to deal with
+what real fleets do: reports that arrive late, twice or not at all, robots that go silent, alerts that open and close
+while someone is looking. The backend is kept simple where that's safe (memory instead of a database, one instance)
+and careful where it matters (one shared contract, report ordering, liveness, and alert rules that don't flap).
+
+The repo is set up as the start of a product rather than a one-off: shared contracts, a domain package with the
+business rules, written conventions in [CLAUDE.md](CLAUDE.md), decision records in [docs/adr](docs/adr), CI, and
+tests at three levels.
+
 ## What it does
 
 - **Fleet page.** Counts of critical, offline and warning robots across the fleet, one tab per site (the busiest opens
@@ -110,6 +122,18 @@ Everything between the ingest endpoint and the screen is the real thing: validat
 liveness and alert rules, the snapshot-then-changes stream with reconnects, history over REST, Ack with rollback, and
 the console itself. Nothing in the browser is mocked.
 
+### Left out on purpose
+
+- **A database.** Memory keeps setup to one command, and the engine is the only place state changes, so a store can
+  slot in behind it later.
+- **User accounts and roles.** One shared password is enough for a demo. Production would use single sign-on.
+- **Alert settings in the UI.** The thresholds live in one place in `packages/domain`; editing them is an admin feature
+  the brief didn't need.
+- **A fleet-wide event log.** Closed alerts show per robot for 30 minutes. A searchable log across the fleet needs
+  storage first.
+- **Dark mode and a phone layout.** The console is built for desktop and works on a tablet. A fleet manager on a phone
+  would need a different, alert-first screen, not a squeezed version of this one.
+
 ## Key decisions
 
 - **One source of truth for data shapes.** Every message between apps is a zod schema in `packages/contracts`, checked
@@ -137,6 +161,14 @@ the console itself. Nothing in the browser is mocked.
 | `apps/web`            | The console itself                                                |
 
 The coding rules are in [CLAUDE.md](CLAUDE.md).
+
+## With more time
+
+- A fleet-wide event log with filters (robot, site, alert type, time range), backed by stored history.
+- Virtualize the robot table so a site with thousands of robots can show them all without pages.
+- An accessibility pass: a visible focus ring on every control, screen-reader checks, an automated axe scan in CI.
+- Split the 850 kB main JavaScript bundle so the first load is lighter.
+- Tests for the remaining pieces: the browser's stream client against a fake socket, and the Ack rollback.
 
 ## What I'd change for production
 
@@ -166,14 +198,17 @@ The coding rules are in [CLAUDE.md](CLAUDE.md).
 ## Test plan
 
 `npm test` runs the Vitest tests for the core logic: connectivity, report ordering, alert rules, the fleet engine,
-history, the ingest token and console password checks, the browser store's message handling, robot health and the
-battery chart's gaps. They sit next to the code as `*.test.ts`.
+history, the browser store's message handling, robot health, and the battery chart and map path gaps. It also runs the
+server in process: validation, the ingest token and console password, Ack, history and the first stream message. They
+sit next to the code as `*.test.ts`.
 
 `npm run test:e2e` runs the Playwright tests in `e2e/`. It builds the app, starts the server and a small, well-behaved
 simulator on port 8097, and drives a real browser through the Fleet page, search, a robot's page, an unknown robot and
 acknowledging an alert in Action needed. Locally it uses your installed Chrome. Both suites run in CI.
 
-The rest of this plan isn't automated yet. It lists what to cover and at which level, most valuable first.
+The plan below lists what to cover at each level, most valuable first. Most of it is automated. Still to automate: the
+simulation, a few web helpers (`filterRows`, `rankActionNeeded`, `backoffDelay`, `toMapRobot`), delta timing and the
+slow-browser cutoff, the browser's stream client and the Ack rollback.
 
 ### Rules and helpers (unit tests, no server or browser)
 

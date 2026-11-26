@@ -13,6 +13,7 @@
     "dev": "concurrently -k -n server,sim,web -c blue,magenta,green \"npm:dev -w @fleet/server\" \"npm:dev -w @fleet/simulator\" \"npm:dev -w @fleet/web\"",
     "build": "npm run build -w @fleet/web",
     "start": "npm run start -w @fleet/server",
+    "serve": "concurrently -k -n server,sim -c blue,magenta \"npm:start -w @fleet/server\" \"npm:start -w @fleet/simulator\"",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "oxlint",
     "check": "npm run typecheck && npm run lint",

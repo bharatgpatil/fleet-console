@@ -1,6 +1,4 @@
-import type { Alert, FleetSnapshot, RobotLiveState } from '@fleet/contracts';
-
-export type FleetRegistry = Pick<FleetSnapshot, 'sites' | 'robots'>;
+import type { Alert, RobotLiveState } from '@fleet/contracts';
 
 export type FleetDelta = {
   states: RobotLiveState[];

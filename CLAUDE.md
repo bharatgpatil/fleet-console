@@ -77,7 +77,8 @@ codebase coherent as it grows.
 
 - Run `npm run format` and `npm run check` (types, lint) when a unit of work is done; both must pass before a
   commit.
-- Core logic has Vitest tests next to it (`*.test.ts`); `npm test` runs them. The wider test plan is in the README.
+- Core logic has Vitest tests next to it (`*.test.ts`); `npm test` runs them. Key user flows have Playwright tests in
+  `e2e/`; `npm run test:e2e` builds the app and runs them against a fresh stack. The wider test plan is in the README.
   Keep logic in pure functions so it stays easy to test.
 - Before proposing a commit, self-review the diff against these rules, then edge cases: loading and empty
   states, a deleted or unknown entity (robot, site), the link dropping, empty arrays, zero, async races.

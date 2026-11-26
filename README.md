@@ -1,29 +1,31 @@
 # Fleet Console
 
-Real-time console for warehouse robot fleets: live floor plans, robot status, and the alerts that need a person.
+A live view of warehouse robots across several sites. You can see where each robot is, how it's doing, and which
+problems need a person.
 
-## Run it
+## Running it
 
-| What                         | Command                            | Open                  |
-| ---------------------------- | ---------------------------------- | --------------------- |
-| Dev: server + simulator + UI | `npm install` then `npm run dev`   | http://localhost:3000 |
-| Typecheck, lint, format      | `npm run check` · `npm run format` |                       |
-
-- Node ≥ 22.
-
-## Layout
+You need Node 22.13 or newer.
 
 ```
-packages/contracts   zod schemas shared by every app
-packages/domain      pure rules + FleetEngine
-packages/simulation  robot model + fault injection
-apps/server          Fastify, WebSocket fan-out, state in memory
-apps/simulator       runs the simulation, posts batches
-apps/web             api/ · live/ · app/ (layout, theme) · features/<name>/{components,hooks,queries,mutations,utils} · shared/
+npm install
+npm run dev
 ```
 
-Conventions: [CLAUDE.md](CLAUDE.md).
+Then open http://localhost:3000.
 
-## Status
+Before committing, run `npm run format` and `npm run check`.
 
-Scaffold only: configs, theme and empty entry points. The UI target is the clickable prototype.
+## How it's organised
+
+| Folder                | What it does                                                      | Status      |
+| --------------------- | ----------------------------------------------------------------- | ----------- |
+| `packages/contracts`  | The shapes of all data the apps send each other                   | Done        |
+| `packages/domain`     | The rules: when a robot counts as offline, when an alert opens    | Done        |
+| `packages/simulation` | Pretend robots that drive around, drain batteries and drop out    | Not started |
+| `apps/simulator`      | Runs the pretend robots and sends their reports to the server     | Stub        |
+| `apps/server`         | Takes in reports, keeps the current state, streams it to browsers | Stub        |
+| `apps/web`            | The console itself                                                | Theme only  |
+
+The reasons behind the main choices are written up in [docs/adr](docs/adr). The coding rules are in
+[CLAUDE.md](CLAUDE.md).

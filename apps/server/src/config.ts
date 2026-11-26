@@ -10,6 +10,7 @@ const Env = z.object({
   PORT: z.coerce.number().int().default(8080),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   FLEET_ROBOTS_PER_SITE: RobotsPerSite.default([...DEFAULT_ROBOTS_PER_SITE]),
+  WEB_ROOT: z.string().min(1).optional(),
 });
 
 export type Config = z.infer<typeof Env>;

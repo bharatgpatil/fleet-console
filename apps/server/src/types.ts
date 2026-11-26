@@ -20,4 +20,5 @@ export type AppDependencies = {
   registry: FleetRegistry;
   now: () => number;
   logLevel: string;
+  webRoot: string | undefined;
 };

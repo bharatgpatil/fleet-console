@@ -3,4 +3,5 @@ export * from './telemetry.ts';
 export * from './fleet.ts';
 export * from './alerts.ts';
 export * from './api.ts';
+export * from './history.ts';
 export * from './stream.ts';

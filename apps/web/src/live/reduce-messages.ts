@@ -78,5 +78,6 @@ export function reduceMessages({
     ...data,
     hydrated,
     clockOffsetMs: last.serverTime - receivedAt,
+    lastMessageAt: receivedAt,
   };
 }

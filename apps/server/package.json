@@ -9,6 +9,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "@fastify/static": "^11.0.0",
     "@fastify/websocket": "^11.3.7",
     "@fleet/contracts": "*",
     "@fleet/domain": "*",

@@ -1,5 +1,5 @@
 import type { AlertKind } from '@fleet/contracts';
-import type { AlertRules, ConnectivityThresholds } from './types.ts';
+import type { AlertRules, ConnectivityThresholds, HistoryOptions } from './types.ts';
 
 export const CONNECTIVITY_THRESHOLDS: ConnectivityThresholds = {
   staleAfterMs: 5_000,
@@ -22,3 +22,8 @@ export const ALERTS_KEPT_WHILE_OFFLINE: readonly AlertKind[] = [
 export const RESOLVED_ALERT_RETENTION_MS = 30 * 60_000;
 
 export const REBOOT_SEQUENCE_GAP = 1_000;
+
+export const HISTORY_OPTIONS: HistoryOptions = {
+  windowMs: 15 * 60_000,
+  everyMs: 5_000,
+};

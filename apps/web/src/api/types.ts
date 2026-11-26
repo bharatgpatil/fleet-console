@@ -1,4 +1,4 @@
-import type { Alert, ServerMessage } from '@fleet/contracts';
+import type { Alert, RobotHistory, ServerMessage } from '@fleet/contracts';
 
 export type StreamListener = {
   onMessage: (message: ServerMessage) => void;
@@ -11,4 +11,5 @@ export type FleetStream = {
 export type FleetApi = {
   stream: FleetStream;
   acknowledgeAlert: (alertId: string) => Promise<Alert>;
+  robotHistory: (robotId: string) => Promise<RobotHistory>;
 };

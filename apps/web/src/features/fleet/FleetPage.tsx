@@ -156,6 +156,7 @@ export function FleetPage() {
                 highlightedId={hoveredId}
                 onSelect={openRobot}
                 onHover={setHoveredId}
+                trail={null}
               />
             </MapPane>
           )}

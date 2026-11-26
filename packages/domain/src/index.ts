@@ -4,3 +4,4 @@ export * from './connectivity.ts';
 export * from './ordering.ts';
 export * from './alert-rules.ts';
 export * from './fleet-engine.ts';
+export * from './telemetry-history.ts';

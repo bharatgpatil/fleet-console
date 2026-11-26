@@ -1,4 +1,4 @@
-import type { Site } from '@fleet/contracts';
+import type { Position, Site } from '@fleet/contracts';
 import { useTheme } from '@mui/material';
 import { useId } from 'react';
 import { clamp } from '../../../shared/utils/clamp.ts';
@@ -17,6 +17,7 @@ type SiteMapProps = {
   highlightedId: string | null;
   onSelect: ((robotId: string) => void) | null;
   onHover: ((robotId: string | null) => void) | null;
+  trail: readonly Position[] | null;
 };
 
 export function SiteMap({
@@ -26,6 +27,7 @@ export function SiteMap({
   highlightedId,
   onSelect,
   onHover,
+  trail,
 }: SiteMapProps) {
   const theme = useTheme();
   const gridId = useId();
@@ -73,6 +75,19 @@ export function SiteMap({
             fill={theme.palette.text.disabled}
           />
         ))}
+        {trail === null || trail.length < 2 ? null : (
+          <polyline
+            points={trail
+              .map((point) => `${clamp(point.x, 0, width)},${clamp(point.y, 0, height)}`)
+              .join(' ')}
+            fill="none"
+            stroke={theme.palette.primary.main}
+            strokeOpacity={0.4}
+            strokeWidth={radius * 0.3}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        )}
       </MapLayer>
       <MapLayer viewBox={viewBox} preserveAspectRatio="xMidYMid meet">
         {ordered.map((robot) => {

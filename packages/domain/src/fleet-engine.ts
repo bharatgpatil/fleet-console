@@ -5,13 +5,20 @@ import type {
   FleetSnapshot,
   IngestResult,
   Robot,
+  RobotHistory,
   RobotLiveState,
   TelemetrySample,
 } from '@fleet/contracts';
 import { activeAlertKinds, describeAlert } from './alert-rules.ts';
 import { deriveConnectivity } from './connectivity.ts';
-import { ALERT_RULES, CONNECTIVITY_THRESHOLDS, RESOLVED_ALERT_RETENTION_MS } from './constants.ts';
+import {
+  ALERT_RULES,
+  CONNECTIVITY_THRESHOLDS,
+  HISTORY_OPTIONS,
+  RESOLVED_ALERT_RETENTION_MS,
+} from './constants.ts';
 import { classifySample } from './ordering.ts';
+import { TelemetryHistory } from './telemetry-history.ts';
 import type {
   AlertRules,
   ConnectivityThresholds,
@@ -30,6 +37,8 @@ export class FleetEngine {
   private readonly connectivity: ConnectivityThresholds;
   private readonly alertRules: AlertRules;
   private readonly resolvedAlertRetentionMs: number;
+  private readonly history: TelemetryHistory;
+  private readonly historyWindowMs: number;
 
   constructor(
     private readonly registry: FleetRegistry,
@@ -39,6 +48,8 @@ export class FleetEngine {
     this.connectivity = options.connectivity ?? CONNECTIVITY_THRESHOLDS;
     this.alertRules = options.alertRules ?? ALERT_RULES;
     this.resolvedAlertRetentionMs = options.resolvedAlertRetentionMs ?? RESOLVED_ALERT_RETENTION_MS;
+    this.historyWindowMs = (options.history ?? HISTORY_OPTIONS).windowMs;
+    this.history = new TelemetryHistory(options.history ?? HISTORY_OPTIONS);
 
     for (const robot of registry.robots) {
       this.robots.set(robot.id, robot);
@@ -73,6 +84,7 @@ export class FleetEngine {
         { robotId: sample.robotId, last: sample, lastSeenAt: now, connectivity: 'online' },
         now,
       );
+      this.history.record(sample, now);
     }
 
     return result;
@@ -110,6 +122,18 @@ export class FleetEngine {
     this.storeAlert(acknowledged);
 
     return acknowledged;
+  }
+
+  historyOf(robotId: string, now: number): RobotHistory | undefined {
+    if (!this.robots.has(robotId)) {
+      return undefined;
+    }
+
+    return {
+      robotId,
+      windowMs: this.historyWindowMs,
+      points: this.history.pointsOf(robotId, now),
+    };
   }
 
   snapshot(now: number): FleetSnapshot {

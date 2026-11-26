@@ -14,6 +14,7 @@ export type FleetData = {
 export type FleetState = FleetData & {
   hydrated: boolean;
   clockOffsetMs: number;
+  lastMessageAt: number;
 };
 
 export type FleetActions = {
@@ -35,6 +36,7 @@ export type RobotView = {
   site: Site | undefined;
   state: RobotLiveState | undefined;
   openAlerts: Alert[];
+  closedAlerts: Alert[];
   health: Health;
 };
 

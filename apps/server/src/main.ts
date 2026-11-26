@@ -12,7 +12,14 @@ const now = () => Date.now();
 const registry = generateFleet(config.FLEET_ROBOTS_PER_SITE);
 const engine = new FleetEngine(registry, { newId: randomUUID });
 const hub = new StreamHub(engine, now);
-const app = await buildApp({ engine, hub, registry, now, logLevel: config.LOG_LEVEL });
+const app = await buildApp({
+  engine,
+  hub,
+  registry,
+  now,
+  logLevel: config.LOG_LEVEL,
+  webRoot: config.WEB_ROOT,
+});
 
 setInterval(() => engine.tick(now()), TICK_INTERVAL_MS);
 setInterval(() => hub.flush(), STREAM_FLUSH_INTERVAL_MS);

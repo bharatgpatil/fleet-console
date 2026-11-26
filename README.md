@@ -116,7 +116,11 @@ The coding rules are in [CLAUDE.md](CLAUDE.md).
 
 ## Test plan
 
-There are no automated tests yet. This is what to cover and at which level, most valuable first.
+`npm test` runs the Vitest tests for the core logic: connectivity, report ordering, alert rules, the fleet engine,
+history, the browser store's message handling, robot health and the battery chart's gaps. They sit next to the code as
+`*.test.ts` and run in CI.
+
+The rest of this plan isn't automated yet. It lists what to cover and at which level, most valuable first.
 
 ### Rules and helpers (unit tests, no server or browser)
 

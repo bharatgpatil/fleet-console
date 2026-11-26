@@ -14,7 +14,7 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-ENV PORT=8080     SERVER_URL=http://localhost:8080     WEB_ROOT=/app/apps/web/dist     LOG_LEVEL=info
+ENV PORT=8080 HOST=0.0.0.0 SERVER_URL=http://localhost:8080 WEB_ROOT=/app/apps/web/dist LOG_LEVEL=info
 
 EXPOSE 8080
 

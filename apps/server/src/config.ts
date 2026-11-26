@@ -6,13 +6,21 @@ const RobotsPerSite = z
   .transform((value) => value.split(',').map(Number))
   .pipe(z.array(z.number().int().min(1).max(1_000)).min(1).max(3));
 
+const OptionalSecret = (minLength: number) =>
+  z
+    .string()
+    .optional()
+    .transform((value) => (value === '' ? undefined : value))
+    .pipe(z.string().min(minLength).optional());
+
 const Env = z.object({
   PORT: z.coerce.number().int().default(8080),
+  HOST: z.string().min(1).default('localhost'),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   FLEET_ROBOTS_PER_SITE: RobotsPerSite.default([...DEFAULT_ROBOTS_PER_SITE]),
   WEB_ROOT: z.string().min(1).optional(),
-  INGEST_TOKEN: z.string().min(16).optional(),
-  CONSOLE_PASSWORD: z.string().min(8).optional(),
+  INGEST_TOKEN: OptionalSecret(16),
+  CONSOLE_PASSWORD: OptionalSecret(8),
 });
 
 export type Config = z.infer<typeof Env>;

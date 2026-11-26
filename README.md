@@ -48,6 +48,10 @@ Set two secrets on the host before it goes public. `INGEST_TOKEN` (16+ character
 can post reports. `CONSOLE_PASSWORD` (8+ characters) puts the console, Ack and the stream behind the browser's
 password prompt, with any user name. Both are off when unset, which is what you want locally.
 
+On Render, `render.yaml` sets this up: New → Blueprint, pick this repo, and enter a console password when asked.
+Render generates the ingest token. The free plan sleeps after 15 minutes without visitors and starts with fresh data
+when it wakes.
+
 ## How data moves
 
 The simulator plays the robots and sends their reports to the server twice a second. The server checks each report,

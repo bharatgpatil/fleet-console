@@ -26,7 +26,7 @@ const app = await buildApp({
 setInterval(() => engine.tick(now()), TICK_INTERVAL_MS);
 setInterval(() => hub.flush(), STREAM_FLUSH_INTERVAL_MS);
 
-await app.listen({ port: config.PORT });
+await app.listen({ port: config.PORT, host: config.HOST });
 
 if (config.INGEST_TOKEN === undefined) {
   app.log.warn('INGEST_TOKEN is not set, so anyone who can reach the server can post telemetry');

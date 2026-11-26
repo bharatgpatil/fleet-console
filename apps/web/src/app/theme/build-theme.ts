@@ -46,7 +46,6 @@ function sharedOptions(t: DesignTokens): ThemeOptions {
           'a, button, [role="button"], [role="tab"], input, label': { touchAction: 'manipulation' },
           '@media (pointer: fine)': { html: { overscrollBehavior: 'none' } },
           '.mono, .tabular': { fontFamily: t.font.mono, fontVariantNumeric: 'tabular-nums' },
-          // ::-webkit rules are for Safari, which ignores scrollbar-color.
           '*': {
             scrollbarWidth: 'thin',
             scrollbarColor:

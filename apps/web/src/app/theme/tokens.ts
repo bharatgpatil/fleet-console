@@ -1,4 +1,4 @@
-import type { Health } from '../../live/health.ts';
+import type { Health } from '../../live/types.ts';
 
 export const MONO_FONT =
   '"JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace';

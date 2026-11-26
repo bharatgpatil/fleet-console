@@ -2,6 +2,7 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/jetbrains-mono';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { createFleetApi } from './api/create-fleet-api.ts';
 import { App } from './app/App.tsx';
 
 const root = document.getElementById('root');
@@ -12,6 +13,6 @@ if (root === null) {
 
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <App api={createFleetApi()} />
   </StrictMode>,
 );

@@ -9,6 +9,10 @@ import { StaleBanner } from './StaleBanner.tsx';
 export function AppShell() {
   const hydrated = useFleet((state) => state.hydrated);
 
+  if (!hydrated) {
+    return <FleetLoading />;
+  }
+
   return (
     <ShellRoot>
       <SkipLink href="#main">Skip to content</SkipLink>
@@ -19,9 +23,9 @@ export function AppShell() {
           <ActionNeededButton />
         </TopBarToolbar>
       </TopBar>
-      <Main id="main" tabIndex={-1} aria-busy={!hydrated}>
+      <Main id="main" tabIndex={-1}>
         <StaleBanner />
-        {hydrated ? <Outlet /> : <FleetLoading />}
+        <Outlet />
       </Main>
     </ShellRoot>
   );

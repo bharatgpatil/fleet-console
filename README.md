@@ -3,6 +3,9 @@
 A live view of warehouse robots across several sites. You can see where each robot is, how it's doing, what happened
 in the last few minutes, and which problems need a person.
 
+**Live demo:** https://fleet-console-2ef6.onrender.com (free plan: the first visit after a quiet spell can take up to a
+minute while it wakes, and it starts with fresh data).
+
 ## What it does
 
 - **Fleet page.** Counts of critical, offline and warning robots across the fleet, one tab per site (the busiest opens

@@ -28,7 +28,7 @@ export function LiveTelemetry({ last, stale }: LiveTelemetryProps) {
         </Stack>
         <BatteryMeter value={last.battery} charging={charging} stale={stale} width={240} />
       </div>
-      <ReadingsGrid stale={stale}>
+      <ReadingsGrid>
         <TelemetryReading
           label="Activity"
           value={last.activity}

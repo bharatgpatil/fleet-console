@@ -24,7 +24,7 @@ import {
 
 export function RobotDetailPage() {
   const { robotId } = useParams({ from: '/robots/$robotId' });
-  const { robot, site, state, health } = useRobotView(robotId);
+  const { robot, site, state, openAlerts, health } = useRobotView(robotId);
 
   if (robot === undefined) {
     return (
@@ -96,7 +96,7 @@ export function RobotDetailPage() {
             </SectionCard>
             <SectionCard title="Open alerts">
               <CardPadding>
-                <RobotAlerts robotId={robot.id} />
+                <RobotAlerts alerts={openAlerts} />
               </CardPadding>
             </SectionCard>
           </Stack>

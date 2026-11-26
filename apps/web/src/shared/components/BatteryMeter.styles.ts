@@ -7,7 +7,7 @@ export const MeterTrack = styled('div', {
   position: 'relative',
   width: trackWidth,
   height: 8,
-  borderRadius: 4,
+  borderRadius: theme.tokens.radius.pill,
   backgroundColor: theme.palette.action.hover,
   overflow: 'hidden',
   flexShrink: 0,

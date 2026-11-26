@@ -26,25 +26,12 @@ export const RobotMarker = memo(function RobotMarker({
     <g
       transform={`translate(${x} ${y})`}
       opacity={dimmed && !highlighted ? 0.15 : 1}
-      role={onSelect === null ? 'img' : 'button'}
-      tabIndex={onSelect === null ? undefined : 0}
+      role="img"
       aria-label={label}
-      style={{ cursor: onSelect === null ? 'default' : 'pointer', outline: 'none' }}
+      cursor={onSelect === null ? 'default' : 'pointer'}
       onClick={onSelect === null ? undefined : () => onSelect(robot.id)}
-      onKeyDown={
-        onSelect === null
-          ? undefined
-          : (event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                onSelect(robot.id);
-              }
-            }
-      }
       onMouseEnter={onHover === null ? undefined : () => onHover(robot.id)}
       onMouseLeave={onHover === null ? undefined : () => onHover(null)}
-      onFocus={onHover === null ? undefined : () => onHover(robot.id)}
-      onBlur={onHover === null ? undefined : () => onHover(null)}
     >
       <title>{label}</title>
       {highlighted ? <circle r={radius * 2.1} fill={color} fillOpacity={0.14} /> : null}

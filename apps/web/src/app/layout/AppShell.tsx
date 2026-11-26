@@ -1,9 +1,9 @@
 import { Outlet } from '@tanstack/react-router';
 import { NeedsYouButton } from '../../features/alerts/index.ts';
 import { useFleet } from '../../live/use-fleet.ts';
-import { PageSpinner } from '../../shared/components/PageSpinner.tsx';
 import { Main, ShellRoot, SkipLink, Spacer, TopBar, TopBarToolbar } from './AppShell.styles.ts';
 import { Brand } from './Brand.tsx';
+import { FleetLoading } from './FleetLoading.tsx';
 
 export function AppShell() {
   const hydrated = useFleet((state) => state.hydrated);
@@ -19,7 +19,7 @@ export function AppShell() {
         </TopBarToolbar>
       </TopBar>
       <Main id="main" tabIndex={-1} aria-busy={!hydrated}>
-        {hydrated ? <Outlet /> : <PageSpinner />}
+        {hydrated ? <Outlet /> : <FleetLoading />}
       </Main>
     </ShellRoot>
   );

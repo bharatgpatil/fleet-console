@@ -21,6 +21,8 @@ export const MAX_BATCH_DELAY_MS = 1_000;
 
 export const CLOCK_TICK_MS = 1_000;
 
+export const SLOW_CONNECT_MS = 5_000;
+
 export const NO_ALERTS: Alert[] = [];
 
 export const INITIAL_FLEET_STATE: FleetState = {

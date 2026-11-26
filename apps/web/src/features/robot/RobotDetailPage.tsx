@@ -14,6 +14,7 @@ import { SiteMap, toMapRobot } from '../site-map/index.ts';
 import { LiveTelemetry } from './components/LiveTelemetry.tsx';
 import { RobotHistory } from './components/RobotHistory.tsx';
 import { useRobotHistory } from './queries/use-robot-history.ts';
+import { trailSegments } from './utils/trail-segments.ts';
 import {
   BackLinkLabel,
   backLinkSx,
@@ -31,7 +32,7 @@ export function RobotDetailPage() {
   const history = useRobotHistory(robotId);
 
   const trail = useMemo(
-    () => (history.data === undefined ? null : history.data.points.map((point) => point.position)),
+    () => (history.data === undefined ? null : trailSegments(history.data.points)),
     [history.data],
   );
 

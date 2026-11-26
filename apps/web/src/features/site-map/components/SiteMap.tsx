@@ -1,9 +1,9 @@
-import type { Position, Site } from '@fleet/contracts';
+import type { Site } from '@fleet/contracts';
 import { useTheme } from '@mui/material';
 import { useId } from 'react';
 import { clamp } from '../../../shared/utils/clamp.ts';
 import { countLabel } from '../../../shared/utils/format.ts';
-import type { MapRobot } from '../types.ts';
+import type { MapRobot, TrailSegment } from '../types.ts';
 import { labelAnchor } from '../utils/label-anchor.ts';
 import { RobotMarker } from './RobotMarker.tsx';
 import { MapFrame, MapLayer } from './SiteMap.styles.ts';
@@ -17,7 +17,7 @@ type SiteMapProps = {
   highlightedId: string | null;
   onSelect: ((robotId: string) => void) | null;
   onHover: ((robotId: string | null) => void) | null;
-  trail: readonly Position[] | null;
+  trail: readonly TrailSegment[] | null;
 };
 
 export function SiteMap({
@@ -75,9 +75,10 @@ export function SiteMap({
             fill={theme.palette.text.disabled}
           />
         ))}
-        {trail === null || trail.length < 2 ? null : (
+        {(trail ?? []).map((segment) => (
           <polyline
-            points={trail
+            key={segment.id}
+            points={segment.points
               .map((point) => `${clamp(point.x, 0, width)},${clamp(point.y, 0, height)}`)
               .join(' ')}
             fill="none"
@@ -87,7 +88,7 @@ export function SiteMap({
             strokeLinejoin="round"
             strokeLinecap="round"
           />
-        )}
+        ))}
       </MapLayer>
       <MapLayer viewBox={viewBox} preserveAspectRatio="xMidYMid meet">
         {ordered.map((robot) => {

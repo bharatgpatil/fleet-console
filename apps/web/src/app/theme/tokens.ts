@@ -1,8 +1,8 @@
 import type { Health } from '../../live/types.ts';
 
-export const MONO_FONT =
+const MONO_FONT =
   '"JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace';
-export const INTER = '"Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+const INTER = '"Inter Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
 
 export type DesignTokens = {
   font: {

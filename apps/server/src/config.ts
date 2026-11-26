@@ -23,7 +23,7 @@ const Env = z.object({
   CONSOLE_PASSWORD: OptionalSecret(8),
 });
 
-export type Config = z.infer<typeof Env>;
+type Config = z.infer<typeof Env>;
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   return Env.parse(env);

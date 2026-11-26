@@ -4,7 +4,7 @@ function digest(value: string): Buffer {
   return createHash('sha256').update(value).digest();
 }
 
-export function safeEqual(received: string, expected: string): boolean {
+function safeEqual(received: string, expected: string): boolean {
   return timingSafeEqual(digest(received), digest(expected));
 }
 

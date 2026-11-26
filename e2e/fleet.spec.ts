@@ -1,4 +1,15 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
+
+async function reportingRobotName(page: Page): Promise<string> {
+  const row = page
+    .getByRole('row')
+    .filter({ has: page.getByRole('meter') })
+    .first();
+
+  await expect(row).toBeVisible();
+
+  return row.getByRole('link').innerText();
+}
 
 test('the Fleet page shows live robots', async ({ page }) => {
   await page.goto('/');
@@ -6,27 +17,26 @@ test('the Fleet page shows live robots', async ({ page }) => {
   await expect(page).toHaveURL(/\/fleet/);
   await expect(page.getByRole('heading', { name: 'Fleet overview' })).toBeAttached();
   await expect(page.getByRole('tab', { name: /All sites/ })).toBeVisible();
-  await expect(page.getByRole('row').nth(1)).toBeVisible();
+  await expect(page.getByRole('meter', { name: /^Battery \d+%/ }).first()).toBeVisible();
 });
 
 test('search keeps only robots whose name matches', async ({ page }) => {
   await page.goto('/fleet?site=all');
 
-  const firstName = await page.getByRole('row').nth(1).getByRole('link').innerText();
+  const name = await reportingRobotName(page);
 
-  await page.getByRole('searchbox', { name: 'Search robots by name' }).fill(firstName);
+  await page.getByRole('searchbox', { name: 'Search robots by name' }).fill(name);
 
-  await expect(page).toHaveURL(new RegExp(`q=${encodeURIComponent(firstName)}`));
+  await expect.poll(() => new URL(page.url()).searchParams.get('q')).toBe(name);
   await expect(page.getByRole('row')).toHaveCount(2);
 });
 
 test('a robot name opens its page with live data and history', async ({ page }) => {
   await page.goto('/fleet?site=all');
 
-  const link = page.getByRole('row').nth(1).getByRole('link');
-  const name = await link.innerText();
+  const name = await reportingRobotName(page);
 
-  await link.click();
+  await page.getByRole('link', { name, exact: true }).click();
 
   await expect(page).toHaveURL(/\/robots\//);
   await expect(page.getByRole('heading', { level: 1, name })).toBeVisible();

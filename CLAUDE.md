@@ -68,6 +68,7 @@ codebase coherent as it grows.
   save (`.vscode/settings.json`); `npm run format` does the whole repo.
 - Narrow instead of asserting: no `any`, no `foo!`, no `as` (except `as const`, a generic that needs inference
   help, and `obj[key as keyof typeof obj]`). Bind a narrowed value to a local `const` before a closure.
+- `type`, never `interface`, except inside `declare module` augmentation (only interfaces merge).
 - Alternatives are discriminated unions, not one type with optional properties.
 - Null checks are explicit (`x === null`, `x === undefined`, or both); never `== null`.
 - Conditional JSX: `cond ? <X /> : null`, not `cond && <X />`.

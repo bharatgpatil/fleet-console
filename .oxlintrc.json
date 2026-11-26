@@ -1,0 +1,89 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "import", "unicorn"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "curly": ["error", "all"],
+    "react/react-in-jsx-scope": "off",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "unicorn/prefer-add-event-listener": "off",
+    "import/no-unassigned-import": ["warn", { "allow": ["@fontsource-variable/**"] }],
+    "no-console": ["warn", { "allow": ["warn", "error"] }]
+  },
+  "overrides": [
+    {
+      "files": ["packages/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": ["react", "react-dom", "@mui/*", "fastify", "node:*"],
+                "message": "packages/* are runtime-agnostic: no UI, server or Node-only imports."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["apps/web/src/features/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "../fleet/**",
+                  "../../fleet/**",
+                  "!../fleet/index.ts",
+                  "!../../fleet/index.ts",
+                  "../robot/**",
+                  "../../robot/**",
+                  "!../robot/index.ts",
+                  "!../../robot/index.ts",
+                  "../alerts/**",
+                  "../../alerts/**",
+                  "!../alerts/index.ts",
+                  "!../../alerts/index.ts",
+                  "../site-map/**",
+                  "../../site-map/**",
+                  "!../site-map/index.ts",
+                  "!../../site-map/index.ts"
+                ],
+                "message": "Import other features through their public index.ts, not their internals."
+              },
+              {
+                "group": [
+                  "**/api/create-api.ts",
+                  "**/api/http-client.ts",
+                  "**/api/websocket-stream.ts"
+                ],
+                "message": "Features talk to the FleetApi port (useApi), never to HTTP or WebSocket directly."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["apps/simulator/**", "apps/web/**"],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.ts", "**/*.test.tsx"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ],
+  "ignorePatterns": ["**/dist/**", "**/dist-*/**", "**/node_modules/**"]
+}

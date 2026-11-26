@@ -1,0 +1,29 @@
+{
+  "name": "fleet-console",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n server,sim,web -c blue,magenta,green \"npm:dev -w @fleet/server\" \"npm:dev -w @fleet/simulator\" \"npm:dev -w @fleet/web\"",
+    "build": "npm run build -w @fleet/web",
+    "start": "npm run start -w @fleet/server",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "oxlint",
+    "check": "npm run typecheck && npm run lint",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "concurrently": "^10.0.7",
+    "oxlint": "^1.94.0",
+    "prettier": "^3.10.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

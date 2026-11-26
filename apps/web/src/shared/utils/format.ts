@@ -46,6 +46,12 @@ export function formatAge(ms: number): string {
   return `${formatDuration(ms)} ago`;
 }
 
+const shortClockFormat = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' });
+
+export function formatShortClock(timestamp: number): string {
+  return shortClockFormat.format(timestamp);
+}
+
 export function formatClock(timestamp: number): string {
   return clockFormat.format(timestamp);
 }

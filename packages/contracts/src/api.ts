@@ -6,6 +6,7 @@ export const ApiPaths = {
   fleet: '/api/fleet',
   ingest: '/api/ingest',
   acknowledgeAlert: (alertId: string) => `/api/alerts/${encodeURIComponent(alertId)}/ack`,
+  acknowledgeAlertRoute: '/api/alerts/:alertId/ack',
   stream: '/ws',
   health: '/healthz',
 } as const;

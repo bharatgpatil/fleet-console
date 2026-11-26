@@ -19,11 +19,17 @@ const app = await buildApp({
   now,
   logLevel: config.LOG_LEVEL,
   webRoot: config.WEB_ROOT,
+  ingestToken: config.INGEST_TOKEN,
+  consolePassword: config.CONSOLE_PASSWORD,
 });
 
 setInterval(() => engine.tick(now()), TICK_INTERVAL_MS);
 setInterval(() => hub.flush(), STREAM_FLUSH_INTERVAL_MS);
 
 await app.listen({ port: config.PORT });
+
+if (config.INGEST_TOKEN === undefined) {
+  app.log.warn('INGEST_TOKEN is not set, so anyone who can reach the server can post telemetry');
+}
 
 app.log.info({ robots: registry.robots.length, sites: registry.sites.length }, 'server ready');

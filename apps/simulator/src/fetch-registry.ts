@@ -1,11 +1,12 @@
 import { ApiPaths, FleetRegistry } from '@fleet/contracts';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { authHeaders } from './auth-headers.ts';
 import { SERVER_URL } from './config.ts';
 
 export async function fetchRegistry(): Promise<FleetRegistry> {
   for (let attempt = 1; ; attempt++) {
     try {
-      const response = await fetch(`${SERVER_URL}${ApiPaths.fleet}`);
+      const response = await fetch(`${SERVER_URL}${ApiPaths.fleet}`, { headers: authHeaders() });
 
       if (response.ok) {
         return FleetRegistry.parse(await response.json());

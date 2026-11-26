@@ -11,6 +11,8 @@ const Env = z.object({
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   FLEET_ROBOTS_PER_SITE: RobotsPerSite.default([...DEFAULT_ROBOTS_PER_SITE]),
   WEB_ROOT: z.string().min(1).optional(),
+  INGEST_TOKEN: z.string().min(16).optional(),
+  CONSOLE_PASSWORD: z.string().min(8).optional(),
 });
 
 export type Config = z.infer<typeof Env>;

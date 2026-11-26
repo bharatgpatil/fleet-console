@@ -4,7 +4,7 @@ import { SectionHeader, SectionRoot, SectionTitle } from './SectionCard.styles.t
 
 type SectionCardProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   action?: ReactNode;
   children: ReactNode;
 };
@@ -17,9 +17,11 @@ export function SectionCard({ title, subtitle, action, children }: SectionCardPr
           <Typography variant="h6" component="h2" noWrap>
             {title}
           </Typography>
-          <Typography variant="caption" color="text.secondary" noWrap>
-            {subtitle}
-          </Typography>
+          {subtitle === undefined ? null : (
+            <Typography variant="caption" color="text.secondary" noWrap>
+              {subtitle}
+            </Typography>
+          )}
         </SectionTitle>
         {action}
       </SectionHeader>

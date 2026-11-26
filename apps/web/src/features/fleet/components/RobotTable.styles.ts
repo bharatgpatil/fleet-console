@@ -21,6 +21,7 @@ export const TableScroll = styled('div')({
 export const BodyRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== 'highlighted',
 })<{ highlighted: boolean }>(({ theme, highlighted }) => ({
+  cursor: 'pointer',
   backgroundColor: highlighted ? theme.palette.action.hover : undefined,
   '& td': { height: 52 },
 }));

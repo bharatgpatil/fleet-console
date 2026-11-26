@@ -18,6 +18,7 @@ type RobotTableProps = {
   emptyFleet: boolean;
   highlightedId: string | null;
   onHover: (robotId: string | null) => void;
+  onOpen: (robotId: string) => void;
 };
 
 export function RobotTable({
@@ -28,6 +29,7 @@ export function RobotTable({
   emptyFleet,
   highlightedId,
   onHover,
+  onOpen,
 }: RobotTableProps) {
   const [page, setPage] = useState(0);
   const lastPage = Math.max(0, Math.ceil(rows.length / ROWS_PER_PAGE) - 1);
@@ -58,6 +60,7 @@ export function RobotTable({
                   showSite={showSite}
                   highlighted={row.id === highlightedId}
                   onHover={onHover}
+                  onOpen={onOpen}
                 />
               ))}
             </TableBody>

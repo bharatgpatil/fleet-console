@@ -10,5 +10,7 @@ export const MapFrame = styled('div')({
 export const MapLayer = styled('svg')({
   position: 'absolute',
   inset: 0,
+  width: '100%',
+  height: '100%',
   display: 'block',
 });

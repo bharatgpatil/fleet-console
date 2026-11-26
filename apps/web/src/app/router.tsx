@@ -1,4 +1,10 @@
-import { createRootRoute, createRoute, createRouter, redirect } from '@tanstack/react-router';
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  lazyRouteComponent,
+  redirect,
+} from '@tanstack/react-router';
 import { FleetPage } from '../features/fleet/index.ts';
 import { AppShell } from './layout/AppShell.tsx';
 import { NotFound } from './NotFound.tsx';
@@ -21,8 +27,14 @@ const fleetRoute = createRoute({
   component: FleetPage,
 });
 
+const robotRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/robots/$robotId',
+  component: lazyRouteComponent(() => import('../features/robot/index.ts'), 'RobotDetailPage'),
+});
+
 export const router = createRouter({
-  routeTree: rootRoute.addChildren([indexRoute, fleetRoute]),
+  routeTree: rootRoute.addChildren([indexRoute, fleetRoute, robotRoute]),
   scrollRestoration: true,
 });
 

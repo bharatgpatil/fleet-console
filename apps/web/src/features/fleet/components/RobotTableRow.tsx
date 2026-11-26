@@ -15,6 +15,7 @@ type RobotTableRowProps = {
   showSite: boolean;
   highlighted: boolean;
   onHover: (robotId: string | null) => void;
+  onOpen: (robotId: string) => void;
 };
 
 export const RobotTableRow = memo(function RobotTableRow({
@@ -23,6 +24,7 @@ export const RobotTableRow = memo(function RobotTableRow({
   showSite,
   highlighted,
   onHover,
+  onOpen,
 }: RobotTableRowProps) {
   const last = row.state === undefined ? null : row.state.last;
   const online = row.state !== undefined && row.state.connectivity === 'online';
@@ -66,6 +68,14 @@ export const RobotTableRow = memo(function RobotTableRow({
       highlighted={highlighted}
       onMouseEnter={() => onHover(row.id)}
       onMouseLeave={() => onHover(null)}
+      onClick={() => onOpen(row.id)}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter') {
+          onOpen(row.id);
+        }
+      }}
+      tabIndex={0}
+      aria-label={`Open ${row.robot.name}`}
     >
       {compact ? (
         <TableCell>

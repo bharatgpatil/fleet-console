@@ -47,6 +47,13 @@ export function FleetPage() {
     [navigate],
   );
 
+  const openRobot = useCallback(
+    (robotId: string) => {
+      void navigate({ to: '/robots/$robotId', params: { robotId } });
+    },
+    [navigate],
+  );
+
   const selectSite = useCallback((site: string) => setSearch({ site }), [setSearch]);
 
   const showAll = search.site === ALL_SITES;
@@ -153,7 +160,7 @@ export function FleetPage() {
                 robots={markers}
                 focusIds={focusIds}
                 highlightedId={hoveredId}
-                onSelect={null}
+                onSelect={openRobot}
                 onHover={setHoveredId}
               />
             </MapPane>
@@ -168,6 +175,7 @@ export function FleetPage() {
               emptyFleet={allRows.length === 0}
               highlightedId={hoveredId}
               onHover={setHoveredId}
+              onOpen={openRobot}
             />
           </ListPane>
         </CardBody>
